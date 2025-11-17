@@ -1,0 +1,23 @@
+# Ignora CUALQUIER carpeta node_modules en el proyecto (backend, frontend, etc.)
+**/node_modules
+
+# Archivos de variables de entorno (Contraseñas, API Keys)
+# NUNCA subas estos archivos.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos de Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Tu archivo de prueba personal
+pruebaAdmin.txt
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
