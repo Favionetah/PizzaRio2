@@ -8,6 +8,8 @@ const { authMiddleware } = require('../middleware/auth'); // <-- Importar seguri
 router.get('/products', ProductController.getAllProducts);
 
 // POST Pedidos (Privado - Requiere Login)
-router.post('/orders', authMiddleware, OrderController.createOrder); // <-- NUEVA RUTA
+router.post('/orders', authMiddleware, OrderController.createOrder);
+
+router.get('/orders/my-history', authMiddleware, OrderController.getMyHistory);
 
 module.exports = router;
