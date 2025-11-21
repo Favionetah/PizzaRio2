@@ -95,6 +95,19 @@ export default {
             return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
         }
     },
+
+    // mounted se ejecuta apenas aparece este componente en pantalla
+    async mounted() {
+        try {
+            const res = await fetch('http://localhost:3000/api/products');
+            const data = await res.json();
+            this.productos = data;
+            this.loading = false;
+        } catch (error) {
+            console.error('Error cargando menú:', error);
+            this.loading = false;
+        }
+    },
     methods: {
         // 3. NUEVO: Función inteligente para añadir
         agregar(prod) {
@@ -120,21 +133,4 @@ export default {
             }
         }
     },
-    // mounted se ejecuta apenas aparece este componente en pantalla
-    async mounted() {
-        try {
-            const res = await fetch('http://localhost:3000/api/products');
-            const data = await res.json();
-            this.productos = data;
-            this.loading = false;
-        } catch (error) {
-            console.error('Error cargando menú:', error);
-            this.loading = false;
-        }
-    },
-    methods: {
-        agregar(prod) {
-            alert(`Añadiste ${prod.nombre} (Lógica de carrito pendiente)`);
-        }
-    }
 }
