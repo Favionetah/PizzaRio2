@@ -17,28 +17,25 @@
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    padding: 0;
     font-family: 'Arial', sans-serif;
     height: 100vh;
-    overflow: hidden; /* El scroll principal lo maneja #app */
+    overflow: hidden;
     background-color: var(--bg-crema);
 }
 
-/* Contenedor Principal con Fondo Parallax */
+/* Contenedor Principal */
 #app {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    /* Fondo fijo */
     background: url('../images/pizzaHomeView.jpg') no-repeat center center fixed;
     background-size: cover;
-    /* Scroll interno */
     overflow-y: auto;
-    overflow-x: hidden;
 }
 
 /* =========================================
@@ -55,8 +52,6 @@ body {
     align-items: center;
     height: 80px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    
-    /* Sticky: se queda pegado arriba al hacer scroll */
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -133,7 +128,7 @@ nav a.is-active {
 }
 
 /* --- Footer --- */
-.Pizza.Rio-footer { 
+.pizza-rio-footer {
     background-color: var(--rojo-tomate);
     color: white;
     padding: 20px 40px;
@@ -145,25 +140,28 @@ nav a.is-active {
     z-index: 10;
 }
 
-.Pizza.Rio-footer p { margin: 0; }
+.pizza-rio-footer p { 
+    margin: 0; 
+}
 
 /* =========================================
    3. MAIN CONTENT WRAPPER
    ========================================= */
 .main-content {
-    flex-grow: 1; /* Empuja el footer hacia abajo */
-    position: relative;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente */
     min-height: calc(100vh - 80px);
+    position: relative;
 }
 
 /* =========================================
-   4. VISTA HOME (Vertical Scroll)
+   4. VISTA HOME
    ========================================= */
 .home-content-wrapper {
-    min-height: calc(100vh - 130px);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
     background-color: transparent;
 }
 
@@ -172,6 +170,7 @@ nav a.is-active {
     height: 60vh;
     overflow: hidden;
     position: relative;
+    flex-shrink: 0;
 }
 
 .home-hero-image-top img {
@@ -186,7 +185,8 @@ nav a.is-active {
     color: var(--txt-cafe);
     padding: 40px 50px;
     text-align: center;
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
 }
 
 .home-text-block h2 {
@@ -209,7 +209,10 @@ nav a.is-active {
     text-align: left;
 }
 
-.home-text-block .additional-info h3 { color: var(--amarillo-dorado); }
+.home-text-block .additional-info h3 { 
+    color: var(--amarillo-dorado); 
+    margin-bottom: 15px;
+}
 
 .btn-hero-order {
     background-color: var(--rojo-tomate);
@@ -234,11 +237,51 @@ nav a.is-active {
    ========================================= */
 .client-layout {
     display: grid;
-    grid-template-columns: 1fr 350px; /* Carrito fijo a la derecha */
+    grid-template-columns: 1fr 350px;
     gap: 20px;
     height: calc(100vh - 80px);
     overflow: hidden;
     background-color: var(--bg-crema);
+}
+
+/* Header del Menú */
+.header-menu {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-menu h2 {
+    color: var(--txt-cafe);
+    margin-bottom: 15px;
+}
+
+.filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filtros button {
+    padding: 8px 16px;
+    border: 2px solid var(--amarillo-dorado);
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.filtros button.activo {
+    background-color: var(--amarillo-dorado);
+    color: var(--txt-cafe);
+}
+
+.filtros button:hover {
+    background-color: var(--amarillo-dorado);
+    transform: translateY(-2px);
 }
 
 /* Columna del Menú */
@@ -246,6 +289,13 @@ nav a.is-active {
     padding: 20px;
     overflow-y: auto;
     background-color: #f9f9f9;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: var(--txt-cafe);
 }
 
 .grid-productos {
@@ -261,7 +311,10 @@ nav a.is-active {
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     transition: transform 0.2s;
 }
-.card-producto:hover { transform: translateY(-5px); }
+.card-producto:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
 
 .foto-producto {
     width: 100%;
@@ -269,7 +322,20 @@ nav a.is-active {
     object-fit: cover;
 }
 
-.info-producto { padding: 15px; }
+.info-producto { 
+    padding: 15px; 
+}
+
+.info-producto h3 {
+    color: var(--txt-cafe);
+    margin-bottom: 8px;
+}
+
+.info-producto .desc {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
 
 .precio-btn {
     display: flex;
@@ -284,10 +350,17 @@ nav a.is-active {
     background-color: var(--amarillo-dorado);
     color: var(--txt-cafe);
     border: none;
-    padding: 5px 15px;
+    padding: 8px 16px;
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+    background-color: var(--rojo-tomate);
+    color: white;
+    transform: scale(1.05);
 }
 
 /* Columna del Carrito */
@@ -303,13 +376,44 @@ nav a.is-active {
     padding: 20px;
     background: #fff;
 }
-.cart-header { border-bottom: 1px solid #eee; background: var(--bg-crema); }
-.cart-footer { border-top: 1px solid #eee; margin-top: auto; }
+.cart-header { 
+    border-bottom: 1px solid #eee; 
+    background: var(--bg-crema);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-header h3 {
+    color: var(--txt-cafe);
+    margin: 0;
+}
+
+.badge {
+    background: var(--rojo-tomate);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.cart-footer { 
+    border-top: 1px solid #eee; 
+    margin-top: auto;
+}
 
 .cart-items {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--txt-cafe);
+    font-style: italic;
 }
 
 .cart-item {
@@ -321,6 +425,22 @@ nav a.is-active {
     border-bottom: 1px dashed #eee;
 }
 
+.cart-item-info h4 {
+    color: var(--txt-cafe);
+    margin-bottom: 5px;
+}
+
+.cart-item-info span {
+    color: var(--rojo-tomate);
+    font-weight: bold;
+}
+
+.cart-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .cart-controls button {
     width: 25px;
     height: 25px;
@@ -328,6 +448,28 @@ nav a.is-active {
     border: 1px solid #ddd;
     background: white;
     cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.cart-controls button:hover {
+    background-color: var(--amarillo-dorado);
+    border-color: var(--amarillo-dorado);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--txt-cafe);
+}
+
+.total-price {
+    color: var(--rojo-tomate);
+    font-size: 1.4rem;
 }
 
 .btn-checkout {
@@ -340,22 +482,28 @@ nav a.is-active {
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
-.btn-checkout:disabled { background-color: #ccc; cursor: not-allowed; }
+.btn-checkout:disabled { 
+    background-color: #ccc; 
+    cursor: not-allowed;
+}
+.btn-checkout:not(:disabled):hover {
+    background-color: #c52e12;
+    transform: translateY(-2px);
+}
 
 /* =========================================
-   6. VISTA LOGIN (ESTILO BURGER KING)
+   6. VISTA LOGIN
    ========================================= */
 .login-container {
-    min-height: 100vh;
+    flex-grow: 1;
     background-color: var(--bg-crema);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     font-family: 'Arial', sans-serif;
-    /* Asegura que se sobreponga si es necesario o ocupe todo el ancho */
-    width: 100%; 
 }
 
 .login-form-wrapper {
@@ -403,7 +551,9 @@ nav a.is-active {
     margin-bottom: 20px;
 }
 
-.login-form div { margin-bottom: 25px; }
+.login-form div { 
+    margin-bottom: 25px; 
+}
 
 .login-form label {
     display: block;
@@ -435,7 +585,9 @@ nav a.is-active {
     transform: translateY(-2px);
 }
 
-.login-form input:hover { border-color: var(--rojo-tomate); }
+.login-form input:hover { 
+    border-color: var(--rojo-tomate); 
+}
 
 .btn-login {
     width: 100%;
