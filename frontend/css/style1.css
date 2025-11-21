@@ -1,16 +1,250 @@
-/* --- Layout del Cliente (Menú + Carrito) --- */
+/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN GLOBAL
+   ========================================= */
+:root {
+    /* Colores Base */
+    --rojo-tomate: #E03616;
+    --amarillo-dorado: #f2b705;
+    --bg-crema: #faf7f0;
+    --txt-cafe: #4a3f35;
+
+    /* Alias para compatibilidad (BK Style) */
+    --bk-red: var(--rojo-tomate);
+    --bk-orange: var(--amarillo-dorado);
+    --bk-cream: var(--bg-crema);
+    --bk-brown: var(--txt-cafe);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    overflow: hidden; /* El scroll principal lo maneja #app */
+    background-color: var(--bg-crema);
+}
+
+/* Contenedor Principal con Fondo Parallax */
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Fondo fijo */
+    background: url('../images/pizzaHomeView.jpg') no-repeat center center fixed;
+    background-size: cover;
+    /* Scroll interno */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. ESTRUCTURA FIJA (HEADER Y FOOTER)
+   ========================================= */
+
+/* --- Header --- */
+.bk-header {
+    background-color: var(--bg-crema);
+    color: var(--txt-cafe);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    
+    /* Sticky: se queda pegado arriba al hacer scroll */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    color: var(--rojo-tomate);
+    margin: 0;
+    font-weight: 900;
+}
+
+/* Navegación */
+nav a {
+    text-decoration: none;
+    color: var(--txt-cafe);
+    font-weight: 700;
+    margin: 0 10px;
+    padding: 8px 15px;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    transition: all 0.2s ease;
+}
+
+nav a:hover,
+nav a.is-active {
+    background-color: var(--amarillo-dorado);
+    box-shadow: 0 0 0 3px rgba(242, 183, 5, 0.5);
+    color: var(--txt-cafe);
+    border-color: var(--amarillo-dorado);
+}
+
+/* Botones Auth Header */
+.auth-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-pide-aqui {
+    background-color: var(--rojo-tomate);
+    color: white;
+    font-size: 1rem;
+}
+
+.btn-pide-aqui:hover { background-color: #c72d12; }
+
+.btn-register {
+    background-color: transparent;
+    color: var(--txt-cafe);
+    border: 2px solid var(--txt-cafe);
+}
+
+.btn-register:hover {
+    background-color: var(--txt-cafe);
+    color: white;
+}
+
+/* --- Footer --- */
+.Pizza.Rio-footer { 
+    background-color: var(--rojo-tomate);
+    color: white;
+    padding: 20px 40px;
+    text-align: center;
+    font-size: 0.9rem;
+    width: 100%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+}
+
+.Pizza.Rio-footer p { margin: 0; }
+
+/* =========================================
+   3. MAIN CONTENT WRAPPER
+   ========================================= */
+.main-content {
+    flex-grow: 1; /* Empuja el footer hacia abajo */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente */
+    min-height: calc(100vh - 80px);
+}
+
+/* =========================================
+   4. VISTA HOME (Vertical Scroll)
+   ========================================= */
+.home-content-wrapper {
+    min-height: calc(100vh - 130px);
+    background-color: transparent;
+}
+
+.home-hero-image-top {
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.home-hero-image-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.home-text-block {
+    background-color: var(--bg-crema);
+    color: var(--txt-cafe);
+    padding: 40px 50px;
+    text-align: center;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1); 
+}
+
+.home-text-block h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--rojo-tomate);
+    line-height: 1.1;
+    margin-bottom: 15px;
+}
+
+.home-text-block p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.home-text-block .additional-info {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 2px solid var(--amarillo-dorado);
+    text-align: left;
+}
+
+.home-text-block .additional-info h3 { color: var(--amarillo-dorado); }
+
+.btn-hero-order {
+    background-color: var(--rojo-tomate);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(224, 54, 22, 0.5);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-hero-order:hover {
+    background-color: #c72d12;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   5. VISTA CLIENTE (MENU + CARRITO)
+   ========================================= */
 .client-layout {
     display: grid;
-    grid-template-columns: 1fr 350px; /* El carrito ocupa 350px fijos a la derecha */
+    grid-template-columns: 1fr 350px; /* Carrito fijo a la derecha */
     gap: 20px;
-    height: calc(100vh - 80px); /* Altura total menos el header */
-    overflow: hidden; /* Para que el scroll sea interno */
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    background-color: var(--bg-crema);
 }
 
 /* Columna del Menú */
 .menu-column {
     padding: 20px;
-    overflow-y: auto; /* Scroll solo en el menú */
+    overflow-y: auto;
     background-color: #f9f9f9;
 }
 
@@ -36,18 +270,19 @@
 }
 
 .info-producto { padding: 15px; }
+
 .precio-btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
     font-weight: bold;
-    color: var(--bk-red);
+    color: var(--rojo-tomate);
 }
 
 .btn-add {
-    background-color: var(--bk-orange);
-    color: var(--bk-brown);
+    background-color: var(--amarillo-dorado);
+    color: var(--txt-cafe);
     border: none;
     padding: 5px 15px;
     border-radius: 20px;
@@ -68,7 +303,7 @@
     padding: 20px;
     background: #fff;
 }
-.cart-header { border-bottom: 1px solid #eee; background: var(--bk-cream); }
+.cart-header { border-bottom: 1px solid #eee; background: var(--bg-crema); }
 .cart-footer { border-top: 1px solid #eee; margin-top: auto; }
 
 .cart-items {
@@ -98,7 +333,7 @@
 .btn-checkout {
     width: 100%;
     padding: 15px;
-    background-color: var(--bk-red);
+    background-color: var(--rojo-tomate);
     color: white;
     border: none;
     border-radius: 10px;
@@ -107,3 +342,166 @@
     cursor: pointer;
 }
 .btn-checkout:disabled { background-color: #ccc; cursor: not-allowed; }
+
+/* =========================================
+   6. VISTA LOGIN (ESTILO BURGER KING)
+   ========================================= */
+.login-container {
+    min-height: 100vh;
+    background-color: var(--bg-crema);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    /* Asegura que se sobreponga si es necesario o ocupe todo el ancho */
+    width: 100%; 
+}
+
+.login-form-wrapper {
+    background-color: white;
+    border-radius: 25px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 3px solid var(--txt-cafe);
+}
+
+.login-logo {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(224, 54, 22, 0.3);
+}
+
+.login-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.login-title {
+    color: var(--txt-cafe);
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.login-form div { margin-bottom: 25px; }
+
+.login-form label {
+    display: block;
+    color: var(--txt-cafe);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 3px solid var(--amarillo-dorado);
+    border-radius: 15px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: var(--bg-crema);
+    font-weight: 600;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--rojo-tomate);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(224, 54, 22, 0.1);
+    transform: translateY(-2px);
+}
+
+.login-form input:hover { border-color: var(--rojo-tomate); }
+
+.btn-login {
+    width: 100%;
+    background-color: var(--rojo-tomate);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    box-shadow: 0 6px 0 #c52e12;
+}
+
+.btn-login:hover {
+    background-color: #c52e12;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 #a8250f;
+}
+
+.btn-login:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #a8250f;
+}
+
+.btn-back {
+    width: 100%;
+    background-color: transparent;
+    color: var(--txt-cafe);
+    border: 3px solid var(--amarillo-dorado);
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-back:hover {
+    background-color: var(--amarillo-dorado);
+    color: var(--txt-cafe);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(242, 183, 5, 0.3);
+}
+
+.login-message {
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 700;
+    min-height: 24px;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.login-footer {
+    color: var(--txt-cafe);
+    margin-top: 40px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-weight: 600;
+}
