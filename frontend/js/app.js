@@ -3,6 +3,7 @@ const { createApp } = Vue;
 // Importamos tus vistas
 import HomeView from './views/HomeView.js';
 import LoginView from './views/LoginView.js';
+import RegisterView from './views/RegisterView.js'; 
 import ClientView from './views/ClientView.js';
 import PosView from './views/PosView.js';
 import AdminCashiersView from './views/AdminCashiersView.js';
@@ -16,6 +17,7 @@ createApp({
     components: {
         'home-view': HomeView,
         'login-view': LoginView,
+        'register-view': RegisterView,
         'client-view': ClientView,
         'pos-view': PosView,
         'admin-view': AdminCashiersView,
