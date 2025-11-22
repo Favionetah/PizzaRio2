@@ -18,7 +18,7 @@ Product.getAll = async () => {
             `
         );
 
-        const [otros] = await db.query (
+        const [otros] = await db.query ( //Listado de Productos
             `
             SELECT 
                 idProducto AS id,
