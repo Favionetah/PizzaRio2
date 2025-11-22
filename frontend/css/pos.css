@@ -1,0 +1,179 @@
+/* frontend/css/pos.css */
+:root {
+    --pos-red: #d32f2f;
+    --pos-bg: #f4f4f4;
+    --pos-dark: #333;
+    --pos-border: #ddd;
+}
+
+.pos-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--pos-bg);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+}
+
+/* HEADER ROJO */
+.pos-header {
+    background-color: var(--pos-red);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+/* CONTENEDOR PRINCIPAL (Dividido en 2) */
+.pos-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* IZQUIERDA: PRODUCTOS (65%) */
+.section-products {
+    flex: 65;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--pos-red);
+    padding-bottom: 5px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+.tab-btn.active { color: var(--pos-red); }
+
+.products-grid-pos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.card-pos {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    text-align: center;
+    padding-bottom: 5px;
+}
+.card-pos:active { transform: scale(0.95); border-color: var(--pos-red); }
+.card-pos img { width: 100%; height: 100px; object-fit: cover; }
+.card-pos h4 { margin: 5px 0; font-size: 0.9rem; color: var(--pos-red); }
+.card-pos span { font-weight: bold; font-size: 1rem; }
+
+/* DERECHA: RESUMEN / CARRITO (35%) */
+.section-cart {
+    flex: 35;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 15px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+}
+
+.client-info-box {
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-list {
+    flex: 1;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 0.95rem;
+}
+
+.totals-area {
+    padding-top: 10px;
+    text-align: right;
+}
+.total-big { font-size: 2rem; color: var(--pos-red); font-weight: bold; }
+
+.btn-confirm {
+    background: var(--pos-red);
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.btn-confirm:hover { background: #b71c1c; }
+
+/* FOOTER: PEDIDOS CONFIRMADOS (La caja de abajo) */
+.pos-footer-queue {
+    background: #e0e0e0;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.queue-mini-list { font-size: 0.9rem; color: #333; }
+
+.btn-ver-mas {
+    background: var(--pos-red);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* MODAL (Estilo Imagen 8) */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: white; width: 80%; max-height: 90%;
+    border-radius: 10px; padding: 20px;
+    display: flex; flex-direction: column;
+}
+.modal-header { 
+    display: flex; justify-content: space-between; 
+    color: var(--pos-red); border-bottom: 2px solid #eee;
+    margin-bottom: 10px;
+}
+.queue-table { width: 100%; border-collapse: collapse; }
+.queue-table th { text-align: left; color: #666; }
+.queue-table td { padding: 10px; border-bottom: 1px solid #eee; }
