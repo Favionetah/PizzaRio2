@@ -19,8 +19,8 @@
             </div>
             <nav>
                 <a href="#" @click.prevent="currentView = 'home-view'">Inicio</a>
-                <a href="#">Menú</a>
-                <a href="#">Cupones</a>
+                <a href="#" @click.prevent="currentView = 'client-view'">Menú</a>
+                <a href="#" @click.prevent="currentView = 'myorders-view'">Pedidos</a>
             </nav>
             <div class="auth-buttons">
                 <button v-if="user" @click="logout" class="btn-register">Salir ({{ user.nombre }})</button>

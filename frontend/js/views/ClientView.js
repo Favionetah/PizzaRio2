@@ -20,13 +20,34 @@ export default {
                             v-if="prod.imagen" 
                             :src="'http://localhost:3000/uploads/' + prod.imagen" 
                             class="foto-producto"
+                            @click="openModal(prod)"
+                            style="cursor:pointer"
                         >
                         <div class="info-producto">
-                            <h3>{{ prod.nombre }}</h3>
+                            <h3 @click="openModal(prod)" style="cursor:pointer">{{ prod.nombre }}</h3>
                             <p class="desc">{{ prod.descripcion }}</p>
                             <div class="precio-btn">
                                 <span>Bs {{ prod.precio }}</span>
                                 <button class="btn-add" @click="agregar(prod)">AGREGAR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de producto -->
+                <div v-if="modalOpen" class="modal-overlay" @click.self="closeModal">
+                    <div class="modal-card">
+                        <button class="modal-close" @click="closeModal">✕</button>
+                        <div class="modal-body">
+                            <img v-if="selectedProduct && selectedProduct.imagen" :src="'http://localhost:3000/uploads/' + selectedProduct.imagen" class="modal-image">
+                            <div class="modal-info">
+                                <h2>{{ selectedProduct.nombre }}</h2>
+                                <p class="modal-desc">{{ selectedProduct.descripcion }}</p>
+                                <p><strong>Categoría:</strong> {{ selectedProduct.categoria }}</p>
+                                <p><strong>Precio:</strong> Bs {{ selectedProduct.precio }}</p>
+                                <div class="modal-actions">
+                                    <button class="btn-add" @click="agregar(selectedProduct); closeModal()">Agregar al carrito</button>
+                                </div>
                             </div>
                         </div>
                     </div>
