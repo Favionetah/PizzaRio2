@@ -1,8 +1,8 @@
 export default {
     template: `
-        <div class="client-layout">
+        <div class="menu-view-container" style="padding: 20px; background-color: var(--bg-crema); min-height: 100vh;">
             
-            <div class="menu-column" style="width: 100%;">
+            <div class="menu-column" style="width: 100%; padding: 0;">
                 <div class="header-menu">
                     <h2>Nuestro Menú</h2>
                     <div class="filtros">

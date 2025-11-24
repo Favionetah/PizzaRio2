@@ -1562,3 +1562,26 @@ nav a.is-active {
     }
 }
 
+
+/* =========================================
+   11. UTILIDADES DE FORMULARIO (GENERIC)
+   ========================================= */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--txt-cafe);
+}

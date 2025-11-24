@@ -25,7 +25,7 @@
                 <a href="#" @click.prevent="currentView = 'home-view'">Inicio</a>
                 <a href="#" @click.prevent="currentView = 'showcase-view'">Menú</a>
                 <a href="#" @click.prevent="currentView = 'map-view'">Sucursales</a>
-                <a href="#" @click.prevent="currentView = 'client-view'">Pedidos</a>
+                <a href="#" v-if="user" @click.prevent="currentView = 'client-view'">Pedidos</a>
                 <a href="#" v-if="user && user.role === 'Administrador'"
                     @click.prevent="currentView = 'admin-view'">Administración</a>
             </nav>
