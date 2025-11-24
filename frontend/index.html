@@ -43,14 +43,14 @@
             </div>
         </header>
 
+        
+        <footer class="pizza-rio-footer">
+            <p>&copy; 2025 Pizza Río Bolivia. Todos los derechos reservados.</p>
+        </footer>
         <main class="main-content">
             <component :is="currentView" :user="user" @navigate="handleNavigation" @login-success="handleLoginSuccess"
                 @logout="logout"></component>
         </main>
-
-        <footer class="pizza-rio-footer">
-            <p>&copy; 2025 Pizza Río Bolivia. Todos los derechos reservados.</p>
-        </footer>
     </div>
     
     <script type="module" src="js/app.js"></script>

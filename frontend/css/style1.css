@@ -30,7 +30,7 @@ body {
 
 /* Contenedor Principal */
 #app {
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     background: url('../images/pizzaHomeView.jpg') no-repeat center center fixed;
@@ -136,7 +136,7 @@ nav a.is-active {
     font-size: 0.9rem;
     width: 100%;
     flex-shrink: 0;
-    /*position: fixed;*/
+    position: fixed;
     bottom: 0;
     left: 0;
     z-index: 10;
