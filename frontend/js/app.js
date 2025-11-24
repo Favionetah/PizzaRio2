@@ -11,6 +11,7 @@ import MenuView from './views/MenuView.js';
 import MyOrdersView from './views/MyOrdersView.js';
 import ShowcaseView from './views/ShowcaseView.js';
 import MapView from './views/MapView.js';
+import AdminView from './views/AdminView.js';
 
 createApp({
 
@@ -24,7 +25,8 @@ createApp({
         'menu-view': MenuView,
         'myorders-view': MyOrdersView,
         'showcase-view': ShowcaseView,
-        'map-view': MapView
+        'map-view': MapView,
+        'admin-view': AdminView 
     },
     data() {
         return {
