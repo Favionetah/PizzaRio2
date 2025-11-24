@@ -110,7 +110,7 @@ export default {
             const bounds = new google.maps.LatLngBounds();
 
             this.filteredBranches.forEach(branch => {
-                const position = { lat: parseFloat(branch.lat), lng: parseFloat(branch.lng) };
+                const position = { lat: parseFloat(branch.latitud), lng: parseFloat(branch.longitud) };
 
                 const marker = new google.maps.Marker({
                     position: position,
@@ -147,7 +147,7 @@ export default {
         },
         selectBranch(branch) {
             this.selectedBranch = branch;
-            const position = { lat: parseFloat(branch.lat), lng: parseFloat(branch.lng) };
+            const position = { lat: parseFloat(branch.latitud), lng: parseFloat(branch.longitud) };
             this.map.panTo(position);
             this.map.setZoom(16);
 
@@ -161,7 +161,7 @@ export default {
             }
         },
         openDirections(branch) {
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=${branch.lat},${branch.lng}`, '_blank');
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${branch.latitud},${branch.longitud}`, '_blank');   
         }
     }
 }
