@@ -10,7 +10,7 @@ app.use(express.json()); //para que entienda json que envia el Frontend (ej: el 
 const authRoutes = require('./routes/auth.routes');
 const posRoutes = require('./routes/pos.routes.js');
 const clientRoutes = require('./routes/client.routes.js');
-const adminRoutes = require('./routes/admin.routes');
+const adminRoutes = require('./routes/admin.routes.js');
 const mapRoutes = require('./routes/map.routes');
 //const productRoutes = require('./routes/product.routes.js');
 
