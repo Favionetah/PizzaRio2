@@ -51,8 +51,6 @@ Order.create = async (orderData) => {
 };
 Order.getAllPending = async () => {
     try {
-        // Hacemos JOIN con TClientes para saber quién pidió
-        // Filtramos solo los que NO están entregados ni cancelados
         const sql = `
             SELECT 
                 p.idPedido, 
@@ -60,7 +58,20 @@ Order.getAllPending = async () => {
                 p.totalPedido, 
                 p.tipoPedido, 
                 p.estadoPedido,
-                CONCAT(c.nombre1, ' ', c.apellido1) AS nombreCliente
+                CONCAT(c.nombre1, ' ', c.apellido1) AS nombreCliente,
+                (
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'nombre', COALESCE(pz.nombrePizza, prod.nombreProducto),
+                            'cantidad', dp.cantidad,
+                            'precio', dp.precioUnitario
+                        )
+                    )
+                    FROM TDetallePedidos dp
+                    LEFT JOIN TPizza pz ON dp.idPizza = pz.idPizza
+                    LEFT JOIN TProductos prod ON dp.idProducto = prod.idProducto
+                    WHERE dp.idPedido = p.idPedido
+                ) AS items
             FROM TPedidos p
             JOIN TClientes c ON p.CICliente = c.CICliente
             WHERE p.estadoPedido NOT IN ('Entregado', 'Cancelado')
@@ -88,10 +99,28 @@ Order.updateStatus = async (idPedido, nuevoEstado) => {
 Order.getByClient = async (ciCliente) => {
     try {
         const sql = `
-            SELECT idPedido, fechaPedido, totalPedido, estadoPedido, tipoPedido
-            FROM TPedidos
-            WHERE CICliente = ?
-            ORDER BY fechaPedido DESC
+            SELECT 
+                p.idPedido, 
+                p.fechaPedido, 
+                p.totalPedido, 
+                p.estadoPedido, 
+                p.tipoPedido,
+                (
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'nombre', COALESCE(pz.nombrePizza, prod.nombreProducto),
+                            'cantidad', dp.cantidad,
+                            'precio', dp.precioUnitario
+                        )
+                    )
+                    FROM TDetallePedidos dp
+                    LEFT JOIN TPizza pz ON dp.idPizza = pz.idPizza
+                    LEFT JOIN TProductos prod ON dp.idProducto = prod.idProducto
+                    WHERE dp.idPedido = p.idPedido
+                ) AS items
+            FROM TPedidos p
+            WHERE p.CICliente = ?
+            ORDER BY p.fechaPedido DESC
         `;
         const [rows] = await db.query(sql, [ciCliente]);
         return rows;
@@ -99,6 +128,7 @@ Order.getByClient = async (ciCliente) => {
         throw error;
     }
 };
+
 
 // 4. PARA EL ADMIN: Ver historial global
 Order.getAllHistory = async () => {

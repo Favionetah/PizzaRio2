@@ -7,11 +7,11 @@ const mysql = require('mysql2');
 //es similar a CreateConnection pero mas eficiente
 const pool = mysql.createPool({
     host: 'localhost',
-    database: 'pizzeria_db',
+    database: 'pizzeriario_db',
     user: 'root',
     //password: '123456',
     //database: 'pizzeriario_db',
-    password: 'root',
+    password: '123456',
     //password: 'MTG13',
     waitForConnections: true,
     connectionLimit: 10,

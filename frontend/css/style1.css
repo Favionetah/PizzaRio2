@@ -696,283 +696,154 @@ nav a.is-active {
 }
 
 /* =========================================
-   7. VISTA MIS PEDIDOS (MY ORDERS)
+   7. GESTIÓN DE PEDIDOS (ESTILO IMAGEN REFERENCE)
    ========================================= */
-.my-orders-view {
-    padding: 20px;
+
+.my-orders-container {
+    padding: 30px;
     max-width: 1200px;
-    margin: 0 auto;
-    background-color: var(--bg-crema);
-    min-height: calc(100vh - 80px);
+    margin: 20px auto;
+    background-color: white; /* Fondo blanco limpio */
+    min-height: calc(100vh - 100px);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.orders-header {
+/* Header con línea inferior roja */
+.orders-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     padding-bottom: 15px;
-    border-bottom: 3px solid var(--amarillo-dorado);
+    border-bottom: 2px solid var(--rojo-tomate); /* La línea roja de la imagen */
 }
 
-.orders-header h2 {
-    color: var(--txt-cafe);
-    font-size: 2rem;
-    margin: 0;
-}
-
-.btn-back-menu {
-    background-color: var(--amarillo-dorado);
-    color: var(--txt-cafe);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-back-menu:hover {
-    background-color: var(--rojo-tomate);
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Estados de carga y error */
-.loading-orders {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--txt-cafe);
-}
-
-.spinner {
-    border: 4px solid var(--bg-crema);
-    border-top: 4px solid var(--rojo-tomate);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.error-message {
-    text-align: center;
-    padding: 40px 20px;
-    background: #ffe6e6;
-    border-radius: 15px;
-    margin: 20px 0;
-}
-
-.btn-retry {
-    background-color: var(--rojo-tomate);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-top: 15px;
-}
-
-.empty-orders {
-    text-align: center;
-    padding: 60px 20px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    border-left: 5px solid var(--amarillo-dorado);
-}
-
-.order-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Estados de los pedidos */
-.status-pendiente {
-    border-left-color: var(--amarillo-dorado);
-}
-
-.status-en-preparación {
-    border-left-color: #17a2b8;
-}
-
-.status-en-camino {
-    border-left-color: #ffc107;
-}
-
-.status-entregado {
-    border-left-color: #28a745;
-}
-
-.status-cancelado {
-    border-left-color: #dc3545;
-}
-
-.order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-}
-
-.order-header h3 {
-    color: var(--txt-cafe);
-    margin: 0;
-    font-size: 1.3rem;
-}
-
-.order-date {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.order-details {
-    margin-bottom: 15px;
-}
-
-.order-info p {
-    margin: 8px 0;
-    color: var(--txt-cafe);
-}
-
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
+.orders-title {
+    color: var(--rojo-tomate);
+    font-size: 1.8rem;
+    font-weight: 900;
     text-transform: uppercase;
+    margin: 0;
 }
 
-.status-badge.status-pendiente {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-badge.status-en-preparación {
-    background: #d1ecf1;
-    color: #0c5460;
-}
-
-.status-badge.status-en-camino {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-badge.status-entregado {
-    background: #d4edda;
-    color: #155724;
-}
-
-.status-badge.status-cancelado {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-.load-details {
-    text-align: center;
-    margin: 15px 0;
-}
-
-.btn-load-details {
-    background-color: var(--amarillo-dorado);
-    color: var(--txt-cafe);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-load-details:hover {
-    background-color: var(--rojo-tomate);
-    color: white;
-    transform: translateY(-2px);
-}
-
-.order-items-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px dashed #eee;
-}
-
-.order-items-section h4 {
-    color: var(--txt-cafe);
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-
-.order-items {
+/* --- TABLA PLANA --- */
+.table-responsive {
+    overflow-x: auto;
     margin-top: 10px;
 }
 
-.order-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px dashed #eee;
-}
-
-.order-item:last-child {
-    border-bottom: none;
-}
-
-.item-quantity {
-    font-weight: bold;
-    color: var(--rojo-tomate);
-}
-
-.item-name {
-    flex-grow: 1;
-    margin: 0 10px;
-    color: var(--txt-cafe);
-}
-
-.item-price {
-    font-weight: bold;
-    color: var(--rojo-tomate);
-}
-
-.no-items {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-    font-style: italic;
-}
-
-.order-actions {
-    text-align: center;
-}
-
-.btn-details {
-    background-color: var(--amarillo-dorado);
-    color: var(--txt-cafe);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+.orders-table {
     width: 100%;
+    border-collapse: collapse; /* Importante: Sin espacios entre celdas */
+    font-family: 'Arial', sans-serif;
 }
 
-.btn-details:hover {
-    background-color: var(--rojo-tomate);
+/* Encabezados */
+.orders-table thead th {
+    text-align: left;
+    color: #777; /* Gris oscuro */
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e0b400; /* Línea dorada delgada */
+}
+
+/* Filas */
+.orders-table tbody tr {
+    transition: background 0.2s;
+}
+.orders-table tbody tr:hover {
+    background-color: #fdfdfd;
+}
+
+.orders-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #f0f0f0; /* Línea separatoria sutil */
+    color: #333;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* Estilos de columnas */
+.col-id {
+    font-weight: bold;
+    color: #555;
+}
+
+/* ESTADOS (TEXTO DE COLOR, SIN FONDO) */
+.status-text {
+    font-weight: 900;
+    font-size: 0.95rem;
+}
+
+/* Colores exactos de la imagen */
+.st-text-pendiente { color: #f39c12; } /* Naranja */
+.st-text-en-preparación { color: #0000ff; } /* Azul fuerte */
+.st-text-entregado { color: #27ae60; } /* Verde */
+.st-text-cancelado { color: #c0392b; } /* Rojo */
+
+.col-total {
+    font-weight: normal;
+    color: #000;
+}
+
+/* --- BOTONES DE ACCIÓN (CUADRADOS) --- */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-icon-square {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: opacity 0.2s;
+}
+
+.btn-icon-square:hover { opacity: 0.8; }
+
+/* Botón Check (Verde sólido) */
+.btn-check {
+    background-color: #58d68d; /* Verde claro */
     color: white;
-    transform: translateY(-2px);
+    font-size: 1rem;
 }
 
+/* Botón Lupa (Transparente con icono azul) */
+.btn-search {
+    background-color: transparent;
+    color: #3498db; /* Azul */
+    font-size: 1.4rem; /* Lupa grande */
+    padding: 0;
+}
+
+/* Botón Cancelar (Opcional) */
+.btn-cancel-x {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 1rem;
+}
+
+/* --- MODAL SOLIDO (CORRECCIÓN FONDO) --- */
+.modal-receipt {
+    background-color: white !important; /* Forzar blanco */
+    width: 450px;
+    border-radius: 10px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    display: flex; 
+    flex-direction: column;
+    position: relative;
+    z-index: 2001;
+}
 /* =========================================
    8. VISTA POS (SISTEMA CAJERO)
    ========================================= */
@@ -1196,56 +1067,160 @@ nav a.is-active {
 }
 
 /* MODAL */
+/* =========================================
+   MODAL / RECIBO FLOTANTE (DISEÑO SÓLIDO)
+   ========================================= */
+
 .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    display: flex; 
+    justify-content: center; 
     align-items: center;
-    z-index: 1000;
+    z-index: 2000;
+    backdrop-filter: blur(2px); /* Difuminado suave del fondo */
 }
 
-.modal-content {
-    background: white;
-    width: 80%;
-    max-height: 90%;
-    border-radius: 15px;
+.modal-receipt {
+    background-color: white; /* ¡FONDO SÓLIDO IMPORTANTE! */
+    width: 450px;
+    max-width: 90%;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3); /* Sombra fuerte para dar profundidad */
+    overflow: hidden; /* Para que el contenido respete los bordes redondos */
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Cabecera del Modal */
+.modal-header-box {
+    background-color: var(--bg-crema); /* Fondo crema */
     padding: 20px;
+    border-bottom: 3px solid var(--amarillo-dorado);
+    text-align: center;
+}
+
+.modal-header-box h3 {
+    margin: 0;
+    color: var(--rojo-tomate);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+}
+
+.modal-header-box p {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Lista de productos */
+.receipt-list {
+    list-style: none;
+    margin: 0; 
+    padding: 20px;
+    max-height: 60vh; /* Si es muy largo, hace scroll */
+    overflow-y: auto;
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.receipt-item:last-child {
+    border-bottom: none;
+}
+
+/* Columnas del item */
+.item-desc {
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.modal-header {
-    display: flex;
+.item-name {
+    font-weight: bold;
+    color: var(--txt-cafe);
+    font-size: 1rem;
+}
+
+.item-qty {
+    color: var(--rojo-tomate);
+    font-weight: 900;
+    margin-right: 5px;
+}
+
+.item-unit-price {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+.item-subtotal {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+    margin-left: 15px;
+}
+
+/* Pie del Modal (Total y Botón) */
+.modal-footer-box {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-top: 1px solid #eee;
+}
+
+.receipt-total-row {
+    display: flex; 
     justify-content: space-between;
     align-items: center;
-    color: var(--rojo-tomate);
-    border-bottom: 2px solid #eee;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-}
-
-.queue-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.queue-table th {
-    text-align: left;
+    margin-bottom: 20px;
     color: var(--txt-cafe);
-    padding: 12px;
-    border-bottom: 2px solid var(--amarillo-dorado);
 }
 
-.queue-table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
+.receipt-total-label {
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
+.receipt-total-amount {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--rojo-tomate);
+}
+
+.btn-close-modal {
+    width: 100%;
+    background-color: var(--txt-cafe);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-close-modal:hover {
+    background-color: #333;
+}
+
+/* Animación de entrada */
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 /* =========================================
    9. VISTA ADMIN CAJEROS
    ========================================= */
