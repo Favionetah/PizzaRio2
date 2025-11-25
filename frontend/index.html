@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="css/admin.css">
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYcO6RxgS1q1GjGki_OOH0GbXoJW5ogV0&callback=initMap"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYcO6RxgS1q1GjGki_OOH0GbXoJW5ogV0&callback=initMap"></script>
 </head>
 
 <body>
@@ -23,10 +24,13 @@
             </div>
             <nav>
                 <a href="#" @click.prevent="currentView = 'home-view'">Inicio</a>
-                <a href="#" @click.prevent="currentView = 'showcase-view'">Menú</a>
+                <a href="#" v-if="!user || user.role !== 'Cajero'"
+                    @click.prevent="currentView = 'showcase-view'">Menú</a>
+                <a href="#" v-if="user && user.role === 'Cajero'" @click.prevent="currentView = 'pos-view'">Pedidos</a>
                 <a href="#" @click.prevent="currentView = 'map-view'">Sucursales</a>
-                <a href="#" v-if="user" @click.prevent="currentView = 'myorders-view'">Pedidos</a>
-                
+                <a href="#" v-if="user && user.role !== 'Cajero'"
+                    @click.prevent="currentView = 'myorders-view'">Pedidos</a>
+
                 <a href="#" v-if="user && user.role === 'Administrador'"
                     @click.prevent="currentView = 'admin-employees-view'">Administración</a>
 
@@ -35,15 +39,15 @@
             </nav>
 
             <div class="auth-buttons">
-    
+
                 <div v-if="user" class="user-profile-container">
-                    
+
                     <button @click="toggleUserMenu" class="btn-user-profile">
                         👤 {{ user.nombre }} ▼
                     </button>
 
                     <div v-if="showUserMenu" class="user-dropdown">
-                        
+
                         <div class="dropdown-header">
                             <div style="font-weight: 900; font-size: 1.1rem; color: #333; margin-bottom: 4px;">
                                 {{ user.nombre }}
@@ -65,8 +69,8 @@
         </header>
 
         <main class="main-content">
-            <component :is="currentView" :user="user" @navigate="handleNavigation"
-                @login-success="handleLoginSuccess" @logout="logout"></component>
+            <component :is="currentView" :user="user" @navigate="handleNavigation" @login-success="handleLoginSuccess"
+                @logout="logout"></component>
         </main>
 
         <footer class="pizza-rio-footer">
@@ -77,4 +81,5 @@
     <script type="module" src="js/app.js"></script>
 
 </body>
+
 </html>

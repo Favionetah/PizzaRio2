@@ -8,7 +8,7 @@ export default {
             </div>
             <div class="user-info">
                 👤 CAJERO: {{ user.nombre }} | 
-                <button @click="$emit('navigate', 'home-view')" style="background:none; border:1px solid white; color:white; cursor:pointer;">Salir</button>
+                <button @click="logout" style="background:none; border:1px solid white; color:white; cursor:pointer; border-radius:4px; padding:2px 8px;">Salir</button>
             </div>
         </header>
 
@@ -25,7 +25,7 @@ export default {
                     </button>
                 </div>
 
-                <input type="text" v-model="busqueda" placeholder="🔍 BUSQUEDA" style="padding: 10px; margin-bottom: 10px; width: 100%;">
+                <input type="text" v-model="busqueda" placeholder="🔍 BUSQUEDA" style="padding: 10px; margin-bottom: 10px; width: 100%; border:1px solid #ccc; border-radius:4px;">
 
                 <div class="products-grid-pos">
                     <div 
@@ -44,14 +44,14 @@ export default {
             </div>
 
             <div class="section-cart">
-                <h2 style="color: var(--pos-red); margin-top:0;">RESUMEN PEDIDO</h2>
+                <h2 style="color: var(--pos-red); margin-top:0; border-bottom:2px solid var(--pos-red); padding-bottom:5px;">RESUMEN PEDIDO</h2>
                 
                 <div class="client-info-box">
                     <div>
                         <label>CLIENTE:</label>
-                        <input v-model="nombreCliente" placeholder="Nombre Cliente" style="border:none; background:transparent; font-weight:bold; width: 120px;">
+                        <input v-model="nombreCliente" placeholder="Nombre Cliente" style="border:none; background:transparent; font-weight:bold; width: 140px;">
                     </div>
-                    <button style="background: var(--pos-red); color:white; border:none; padding:5px;">DATOS CLIENTE</button>
+                    <button style="background: var(--pos-red); color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">DATOS</button>
                 </div>
 
                 <div class="cart-list">
@@ -62,7 +62,7 @@ export default {
                         </div>
                         <div style="text-align:right;">
                             <div>{{ item.precio * item.cantidad }} BS.</div>
-                            <button @click="eliminarDelCarrito(index)" style="color:red; border:none; background:none; cursor:pointer;">x</button>
+                            <button @click="eliminarDelCarrito(index)" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">✕</button>
                         </div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@ export default {
                     <button class="btn-confirm" @click="confirmarPedido" :disabled="carrito.length === 0">
                         CONFIRMAR PEDIDO
                     </button>
-                    <button @click="carrito = []" style="width:100%; padding:10px; margin-top:5px; background:white; border:1px solid #ccc; cursor:pointer;">
+                    <button @click="carrito = []" style="width:100%; padding:10px; margin-top:5px; background:white; border:1px solid #ccc; cursor:pointer; border-radius:4px;">
                         CANCELAR
                     </button>
                 </div>
@@ -90,7 +90,7 @@ export default {
             <div>
                 <h4 style="color: var(--pos-red); margin:0; display:inline-block; margin-right:10px;">PEDIDOS CONFIRMADOS</h4>
                 <span class="queue-mini-list">
-                    <span v-for="p in pedidosPendientes.slice(0, 3)" :key="p.idPedido" style="margin-right:15px;">
+                    <span v-for="p in pedidosPendientes.slice(0, 3)" :key="p.idPedido" style="margin-right:15px; font-size:0.85rem;">
                         #{{ p.idPedido }} {{ p.nombreCliente }} ({{ p.estadoPedido }})
                     </span>
                 </span>
@@ -99,7 +99,7 @@ export default {
         </div>
 
         <div v-if="mostrarModal" class="modal-overlay" @click.self="mostrarModal = false">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 90%; height: 90%;">
                 <div class="modal-header">
                     <h2>PEDIDOS CONFIRMADOS</h2>
                     <button @click="mostrarModal = false" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:red;">X</button>
@@ -125,10 +125,20 @@ export default {
                                 </td>
                                 <td>{{ p.totalPedido }} BS.</td>
                                 <td>
-                                    <button @click="avanzarEstado(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Avanzar">
+                                    <button 
+                                        v-if="p.estadoPedido !== 'Entregado'" 
+                                        @click="avanzarEstado(p)" 
+                                        style="cursor:pointer; background:none; border:none; font-size:1.2rem; margin-right:10px;" 
+                                        title="Avanzar Estado"
+                                    >
                                         ✅
                                     </button>
-                                    <button style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Ver Detalle">
+                                    
+                                    <button 
+                                        @click="verDetalle(p)" 
+                                        style="cursor:pointer; background:none; border:none; font-size:1.2rem;" 
+                                        title="Ver Detalle"
+                                    >
                                         🔍
                                     </button>
                                 </td>
@@ -139,33 +149,73 @@ export default {
             </div>
         </div>
 
+        <div v-if="selectedOrder" class="modal-overlay" style="z-index: 2000;" @click.self="selectedOrder = null">
+            <div class="modal-receipt">
+                
+                <div class="modal-header-box">
+                    <h3>DETALLE DE PEDIDO</h3>
+                    <p>Orden Nro. #{{ selectedOrder.idPedido }}</p>
+                    <p style="font-size: 0.8rem; margin-top: 5px; font-weight: normal;">
+                        {{ formatearHora(selectedOrder.fechaPedido) }}
+                    </p>
+                </div>
+                
+                <ul class="receipt-list">
+                    <li v-if="parseItems(selectedOrder.items).length === 0" style="text-align:center; color:#999;">
+                        No hay detalles disponibles.
+                    </li>
+
+                    <li v-for="(item, index) in parseItems(selectedOrder.items)" :key="index" class="receipt-item">
+                        <div class="item-desc">
+                            <div>
+                                <span class="item-qty">{{ item.cantidad }}x</span> 
+                                <span class="item-name">{{ item.nombre }}</span>
+                            </div>
+                            <div class="item-unit-price">P.U: {{ item.precio }} BS.</div>
+                        </div>
+                        <div class="item-subtotal">
+                            {{ (item.precio * item.cantidad).toFixed(2) }} BS.
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="modal-footer-box">
+                    <div class="receipt-total-row">
+                        <span class="receipt-total-label">TOTAL</span>
+                        <span class="receipt-total-amount">{{ selectedOrder.totalPedido }} BS.</span>
+                    </div>
+                    <button class="btn-close-modal-brown" @click="selectedOrder = null">CERRAR</button>
+                </div>
+
+            </div>
+        </div>
+
     </div>
     `,
     props: ['user'],
     data() {
         return {
-            // DATOS DEL MENÚ (Vender)
+            // VENTA
             productos: [],
             carrito: [],
             categorias: ['Pizzas', 'Bebidas', 'Combos', 'Otros'],
             filtro: 'Pizzas',
             busqueda: '',
-            
-            // DATOS DE LA COLA (Gestionar)
+            nombreCliente: '',
+
+            // GESTIÓN
             pedidosPendientes: [],
-            mostrarModal: false,
+            mostrarModal: false, // Modal de la tabla grande
+            selectedOrder: null, // Modal del detalle pequeño (recibo)
             timer: null
         }
     },
     computed: {
         productosFiltrados() {
             let lista = this.productos;
-            // Filtro por categoría (mapeo simple porque en BD guardamos 'pizza' o 'Bebida')
             if (this.filtro === 'Pizzas') lista = this.productos.filter(p => p.categoria === 'Pizzas' || p.categoria === 'pizza');
             else if (this.filtro === 'Bebidas') lista = this.productos.filter(p => p.categoria === 'Bebida');
-            // ... otros filtros
-            
-            // Filtro por búsqueda
+
             if (this.busqueda) {
                 lista = lista.filter(p => p.nombre.toLowerCase().includes(this.busqueda.toLowerCase()));
             }
@@ -178,14 +228,13 @@ export default {
     mounted() {
         this.cargarProductos();
         this.cargarPedidosPendientes();
-        // Polling automático cada 5 seg para ver nuevos pedidos
         this.timer = setInterval(this.cargarPedidosPendientes, 5000);
     },
     unmounted() {
         clearInterval(this.timer);
     },
     methods: {
-        // --- LÓGICA DE VENTA ---
+        // --- MÉTODOS DE VENTA ---
         async cargarProductos() {
             try {
                 const res = await fetch('http://localhost:3000/api/products');
@@ -194,18 +243,14 @@ export default {
         },
         agregarAlCarrito(prod) {
             const existente = this.carrito.find(i => i.id === prod.id);
-            if (existente) {
-                existente.cantidad++;
-            } else {
-                this.carrito.push({ ...prod, cantidad: 1 });
-            }
+            if (existente) existente.cantidad++;
+            else this.carrito.push({ ...prod, cantidad: 1 });
         },
         eliminarDelCarrito(index) {
             this.carrito.splice(index, 1);
         },
         async confirmarPedido() {
             if (!confirm(`¿Confirmar venta por ${this.totalCarrito} BS?`)) return;
-
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch('http://localhost:3000/api/orders', {
@@ -217,26 +262,22 @@ export default {
                     body: JSON.stringify({
                         total: this.totalCarrito,
                         carrito: this.carrito,
-                        // Aquí podrías enviar el nombreCliente si modificas el backend para recibirlo
-                        // Por ahora usaremos el ID del usuario logueado
                         nombreClienteManual: this.nombreCliente
                     })
                 });
 
                 if (res.ok) {
                     alert("✅ PEDIDO CONFIRMADO");
-                    this.carrito = []; // Limpiar carrito
+                    this.carrito = [];
                     this.nombreCliente = '';
-                    this.cargarPedidosPendientes(); // Actualizar la lista de abajo inmediatamente
+                    this.cargarPedidosPendientes();
                 } else {
                     alert("Error al guardar pedido");
                 }
-            } catch (e) {
-                alert("Error de conexión");
-            }
+            } catch (e) { alert("Error de conexión"); }
         },
 
-        // --- LÓGICA DE GESTIÓN (COLA) ---
+        // --- MÉTODOS DE GESTIÓN ---
         async cargarPedidosPendientes() {
             try {
                 const token = localStorage.getItem('token');
@@ -258,19 +299,42 @@ export default {
                 const token = localStorage.getItem('token');
                 await fetch(`http://localhost:3000/api/pos/orders/${pedido.idPedido}/status`, {
                     method: 'PUT',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` 
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({ estado: nuevoEstado })
                 });
                 this.cargarPedidosPendientes();
             } catch (e) { alert("Error"); }
         },
+        logout() {
+            this.$emit('navigate', 'home-view');
+            localStorage.removeItem('token');
+            location.reload();
+        },
+
+        // --- NUEVOS MÉTODOS PARA EL MODAL DETALLE ---
+        verDetalle(order) {
+            this.selectedOrder = order;
+        },
+
         getColorEstado(estado) {
-            if (estado === 'Pendiente') return 'orange';
-            if (estado === 'En preparación') return 'blue';
-            return 'green';
+            if (estado === 'Pendiente') return '#f39c12'; // Naranja
+            if (estado === 'En preparación') return '#2980b9'; // Azul
+            return '#27ae60'; // Verde
+        },
+        formatearHora(fechaISO) {
+            if (!fechaISO) return '';
+            const fecha = new Date(fechaISO);
+            // Formato: DD/MM/YYYY HH:MM
+            return fecha.toLocaleDateString() + ' ' + fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        },
+        parseItems(itemsJson) {
+            try {
+                // Si MySQL devuelve un objeto JSON directo, úsalo. Si es string, paréalo.
+                return typeof itemsJson === 'string' ? JSON.parse(itemsJson) : (itemsJson || []);
+            } catch (e) { return []; }
         }
     }
 }
