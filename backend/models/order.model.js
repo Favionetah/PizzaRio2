@@ -3,7 +3,7 @@ const db = require('../config/db');
 const Order = {}
 
 Order.create = async (orderData) => {
-    const { ciCliente, total, items } = orderData;
+    const { ciCliente, total, items, metodoPago } = orderData;
 
     try {
         // INSERTAR LA CABECERA
@@ -12,10 +12,10 @@ Order.create = async (orderData) => {
         // Si quieres ser estricto, deberías buscar el CIEmpleado basado en el usuario logueado.
         const [result] = await db.query(`
             INSERT INTO TPedidos 
-            (CICliente, idSucursal, CIEmpleado, tipoPedido, estadoPedido, totalPedido, fechaPedido)
-            VALUES (?, 'SC-01', '1234567', 'Para llevar', 'Pendiente', ?, NOW())
+            (CICliente, idSucursal, CIEmpleado, tipoPedido, estadoPedido, totalPedido, metodoPago, fechaPedido)
+            VALUES (?, 'SC-01', '1234567', 'Para llevar', 'Pendiente', ?, ?, NOW())
         `,
-            [ciCliente, total]); // <--- ¡AQUÍ entra 'GENERICO'!
+            [ciCliente, total, metodoPago]);
 
         const idPedidoGenerado = result.insertId;
         for (const item of items) {
