@@ -5,7 +5,7 @@ const OrderController = {};
 
 OrderController.createOrder = async (req, res) => {
     try {
-        const { total, carrito, nombreClienteManual } = req.body;
+        const { total, carrito, nombreClienteManual, metodoPago } = req.body;
 
         console.log("Datos recibidos:", req.body);
 
@@ -38,6 +38,7 @@ OrderController.createOrder = async (req, res) => {
             ciCliente: ciClienteFinal,
             total,
             items: carrito,
+            metodoPago: metodoPago || null, // Agregamos el método de pago
             // Opcional: Pasamos el nombre real que escribió el cajero para guardarlo en descripción o logs
             nombreReferencia: nombreClienteManual
         });
