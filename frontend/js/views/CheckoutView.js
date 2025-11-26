@@ -90,7 +90,6 @@ export default {
 
                 const textoQR = `Pago de Bs ${this.totalCarrito} por: ${this.carrito.map(i => i.cantidad + 'x ' + i.nombre).join(', ')}`;
 
-                // Usando la nueva librería QRCode
                 QRCode.toCanvas(canvas, textoQR, { width: 200 }, function (error) {
                     if (error) console.error(error);
                 });
@@ -112,7 +111,10 @@ export default {
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert(`✅ Pedido confirmado! Número de pedido: #${data.idPedido}`);
+                    // Abrir automáticamente la factura en otra pestaña
+                    window.open(`http://localhost:3000/api/invoices/${data.idPedido}/pdf`, '_blank');
+
+                    // Vaciar carrito y volver al menú
                     this.carrito.splice(0, this.carrito.length);
                     this.$emit('navigate', 'client-view');
                 } else {

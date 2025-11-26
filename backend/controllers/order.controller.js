@@ -1,4 +1,5 @@
 const Order = require('../models/order.model');
+const Invoice = require('../models/invoice.model');
 
 
 const OrderController = {};
@@ -12,21 +13,25 @@ OrderController.createOrder = async (req, res) => {
         // 1. DETERMINAR QUIÉN ES EL CLIENTE EN LA BASE DE DATOS
         let ciClienteFinal;
         let ciEmpleadoFinal;
+        let nitFactura = null;
+        let razonSocialFactura = null;
 
         // Si el usuario logueado es ADMIN o CAJERO (Venta POS)
         if (req.user.role === 'Administrador' || req.user.role === 'Cajero') {
             // En POS, el cliente en BD es el "GENERICO"
             ciClienteFinal = nombreClienteManual;
 
-            // Y el empleado responsable es el usuario logueado (si coincide con CIEmpleado)
-            // O usamos un default si tu sistema de IDs de usuario es diferente al de empleados
-            // Por ahora, mantenemos tu hardcode '1234567' o usamos req.user.id si aplica.
-            // Vamos a dejarlo genérico en el modelo por seguridad, 
-            // pero aquí definimos que es una venta asistida.
+            // Para factura: si es genérico, no hay NIT
+            razonSocialFactura = nombreClienteManual || 'Cliente General';
+            nitFactura = null; // El cajero puede ingresar un cliente genérico sin CI
         }
         // Si el usuario logueado es CLIENTE (Venta Web)
         else {
             ciClienteFinal = req.user.id; // El ID del usuario ES el CI del cliente
+
+            // Para factura: usar el CI como NIT y el nombre del usuario
+            nitFactura = req.user.id;
+            razonSocialFactura = req.user.nombre || 'Cliente';
         }
 
         if (!carrito || carrito.length === 0) {
@@ -38,10 +43,24 @@ OrderController.createOrder = async (req, res) => {
             ciCliente: ciClienteFinal,
             total,
             items: carrito,
-            metodoPago: metodoPago || null, // Agregamos el método de pago
-            // Opcional: Pasamos el nombre real que escribió el cajero para guardarlo en descripción o logs
+            metodoPago: metodoPago || null,
             nombreReferencia: nombreClienteManual
         });
+
+        // 3. CREAR FACTURA AUTOMÁTICAMENTE
+        try {
+            const invoiceResult = await Invoice.create({
+                idPedido: idPedido,
+                nit: nitFactura,
+                razonSocial: razonSocialFactura,
+                totalFactura: total
+            });
+
+            console.log(`Factura creada: ${invoiceResult.numeroFactura}`);
+        } catch (invoiceError) {
+            console.error("Error al crear factura:", invoiceError);
+            // No detenemos el proceso si falla la factura
+        }
 
         res.status(201).json({
             message: "¡Pedido recibido con éxito!",

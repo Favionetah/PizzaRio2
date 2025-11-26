@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura {{numeroFactura}}</title>
+    <style>
+        @page {
+            size: 8.5in 13in;
+            /* Tamaño Oficio */
+            margin: 0.5in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .invoice-container {
+            width: 100%;
+            max-width: 7.5in;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #d62300;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .company-info {
+            flex: 1;
+        }
+
+        .company-name {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #d62300;
+            margin-bottom: 5px;
+        }
+
+        .company-details {
+            font-size: 9pt;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .invoice-title {
+            text-align: right;
+            flex: 0 0 auto;
+        }
+
+        .invoice-title h1 {
+            font-size: 28pt;
+            color: #d62300;
+            margin-bottom: 5px;
+        }
+
+        .invoice-number {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Client Info */
+        .client-section {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .client-section h3 {
+            color: #d62300;
+            margin-bottom: 10px;
+            font-size: 12pt;
+        }
+
+        .client-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .client-field {
+            font-size: 10pt;
+        }
+
+        .client-field strong {
+            color: #666;
+        }
+
+        /* Invoice Details */
+        .invoice-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        .detail-item strong {
+            color: #666;
+        }
+
+        /* Items Table */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .items-table thead {
+            background-color: #d62300;
+            color: white;
+        }
+
+        .items-table th {
+            padding: 10px;
+            text-align: left;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+
+        .items-table th.text-right {
+            text-align: right;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .items-table tbody tr:last-child {
+            border-bottom: 2px solid #d62300;
+        }
+
+        .items-table td {
+            padding: 10px;
+            font-size: 10pt;
+        }
+
+        .items-table td.text-right {
+            text-align: right;
+        }
+
+        .items-table td.text-center {
+            text-align: center;
+        }
+
+        /* Totals */
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .totals-box {
+            width: 300px;
+            border: 2px solid #d62300;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+            background-color: #d62300;
+            color: white;
+            font-weight: bold;
+            font-size: 14pt;
+        }
+
+        .total-label {
+            font-weight: bold;
+        }
+
+        /* Payment Info */
+        .payment-info {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-left: 4px solid #f2b705;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        .payment-info strong {
+            color: #d62300;
+        }
+
+        /* Footer */
+        .invoice-footer {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 15px;
+            margin-top: 30px;
+            font-size: 8pt;
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .footer-legal {
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Utility Classes */
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="company-info">
+                <div class="company-name">PIZZA RÍO</div>
+                <div class="company-details">
+                    <strong>Casa Matriz:</strong> Santa Cruz de la Sierra, Bolivia<br>
+                    <strong>NIT:</strong> 123456789<br>
+                    <strong>Teléfono:</strong> +591 3 123-4567<br>
+                    <strong>Email:</strong> contacto@pizzario.bo
+                </div>
+            </div>
+            <div class="invoice-title">
+                <h1>FACTURA</h1>
+                <div class="invoice-number">{{numeroFactura}}</div>
+            </div>
+        </div>
+
+        <!-- Client Information -->
+        <div class="client-section">
+            <h3>DATOS DEL CLIENTE</h3>
+            <div class="client-grid">
+                <div class="client-field">
+                    <strong>Razón Social / Nombre:</strong><br>
+                    {{razonSocial}}
+                </div>
+                <div class="client-field">
+                    <strong>NIT / CI:</strong><br>
+                    {{nit}}
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+            <div class="detail-item">
+                <strong>Fecha de Emisión:</strong> {{fechaEmision}}
+            </div>
+            <div class="detail-item">
+                <strong>Método de Pago:</strong> {{metodoPago}}
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 10%;">Cant.</th>
+                    <th style="width: 50%;">Descripción</th>
+                    <th class="text-right" style="width: 20%;">Precio Unit.</th>
+                    <th class="text-right" style="width: 20%;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{items}}
+            </tbody>
+        </table>
+
+        <!-- Totals -->
+        <div class="totals-section">
+            <div class="totals-box">
+                <div class="total-row">
+                    <span class="total-label">Subtotal:</span>
+                    <span>Bs {{subtotal}}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label">Descuento:</span>
+                    <span>Bs {{descuento}}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label">TOTAL:</span>
+                    <span>Bs {{totalFactura}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="payment-info">
+            <strong>INFORMACIÓN DE PAGO:</strong><br>
+            Esta factura ha sido pagada mediante <strong>{{metodoPago}}</strong> el día {{fechaEmision}}.
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <div>
+                <strong>PIZZA RÍO - Bolivia</strong><br>
+                Gracias por su preferencia. Para cualquier consulta, contáctenos al +591 3 123-4567
+            </div>
+            <div class="footer-legal">ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO SERÁ SANCIONADO
+                PENALMENTE DE ACUERDO A LEY</div>
+        </div>
+    </div>
+</body>
+
+</html>
