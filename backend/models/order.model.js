@@ -49,6 +49,7 @@ Order.create = async (orderData) => {
         throw error;
     }
 };
+
 Order.getAllPending = async () => {
     try {
         const sql = `
@@ -146,6 +147,65 @@ Order.getAllHistory = async () => {
             ORDER BY p.fechaPedido DESC
         `;
         const [rows] = await db.query(sql);
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// 5. NUEVO: Obtener todos los pedidos con filtros (Para Historial POS/Admin)
+Order.getAllOrders = async (filters) => {
+    try {
+        const { fecha, cliente, pizza } = filters;
+
+        let sql = `
+            SELECT DISTINCT
+                p.idPedido, 
+                p.fechaPedido, 
+                p.totalPedido, 
+                p.estadoPedido, 
+                p.tipoPedido,
+                CONCAT(c.nombre1, ' ', c.apellido1) AS nombreCliente,
+                (
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'nombre', COALESCE(pz.nombrePizza, prod.nombreProducto),
+                            'cantidad', dp.cantidad,
+                            'precio', dp.precioUnitario
+                        )
+                    )
+                    FROM TDetallePedidos dp
+                    LEFT JOIN TPizza pz ON dp.idPizza = pz.idPizza
+                    LEFT JOIN TProductos prod ON dp.idProducto = prod.idProducto
+                    WHERE dp.idPedido = p.idPedido
+                ) AS items
+            FROM TPedidos p
+            JOIN TClientes c ON p.CICliente = c.CICliente
+            LEFT JOIN TDetallePedidos dp ON p.idPedido = dp.idPedido
+            LEFT JOIN TPizza pz ON dp.idPizza = pz.idPizza
+            WHERE 1=1
+        `;
+
+        const params = [];
+
+        if (fecha) {
+            sql += ` AND DATE(p.fechaPedido) = ?`;
+            params.push(fecha);
+        }
+
+        if (cliente) {
+            sql += ` AND (c.nombre1 LIKE ? OR c.apellido1 LIKE ?)`;
+            params.push(`%${cliente}%`, `%${cliente}%`);
+        }
+
+        if (pizza) {
+            sql += ` AND pz.nombrePizza LIKE ?`;
+            params.push(`%${pizza}%`);
+        }
+
+        sql += ` GROUP BY p.idPedido ORDER BY p.fechaPedido DESC`;
+
+        const [rows] = await db.query(sql, params);
         return rows;
     } catch (error) {
         throw error;

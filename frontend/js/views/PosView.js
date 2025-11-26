@@ -95,7 +95,10 @@ export default {
                     </span>
                 </span>
             </div>
-            <button class="btn-ver-mas" @click="mostrarModal = true">VER MÁS</button>
+            <div>
+                <button class="btn-ver-mas" @click="mostrarModal = true">VER MÁS</button>
+                <button class="btn-ver-mas" @click="abrirHistorial" style="margin-left: 10px;">HISTORIAL</button>
+            </div>
         </div>
 
         <div v-if="mostrarModal" class="modal-overlay" @click.self="mostrarModal = false">
@@ -139,6 +142,56 @@ export default {
                                         style="cursor:pointer; background:none; border:none; font-size:1.2rem;" 
                                         title="Ver Detalle"
                                     >
+                                        🔍
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="mostrarHistorial" class="modal-overlay" @click.self="mostrarHistorial = false">
+            <div class="modal-content" style="width: 95%; height: 95%; display:flex; flex-direction:column;">
+                <div class="modal-header">
+                    <h2>HISTORIAL DE PEDIDOS</h2>
+                    <button @click="mostrarHistorial = false" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:red;">X</button>
+                </div>
+
+                <div class="filters-bar" style="display:flex; gap:10px; padding:10px; background:#eee; border-radius:4px; margin-bottom:10px;">
+                    <input type="date" v-model="filtros.fecha" style="padding:5px;">
+                    <input type="text" v-model="filtros.cliente" placeholder="Cliente..." style="padding:5px;">
+                    <input type="text" v-model="filtros.pizza" placeholder="Pizza..." style="padding:5px;">
+                    <button @click="cargarHistorial" style="background:var(--pos-red); color:white; border:none; padding:5px 15px; cursor:pointer; border-radius:4px;">FILTRAR</button>
+                    <button @click="limpiarFiltros" style="background:#666; color:white; border:none; padding:5px 15px; cursor:pointer; border-radius:4px;">LIMPIAR</button>
+                </div>
+
+                <div class="table-container" style="flex:1; overflow-y:auto;">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>FECHA</th>
+                                <th>CLIENTE</th>
+                                <th>TOTAL</th>
+                                <th>ESTADO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="p in historialPedidos" :key="p.idPedido">
+                                <td>#{{ p.idPedido }}</td>
+                                <td>{{ formatearHora(p.fechaPedido) }}</td>
+                                <td>{{ p.nombreCliente }}</td>
+                                <td>{{ p.totalPedido }} BS.</td>
+                                <td>
+                                    <span class="status-badge" :style="{background: getColorEstado(p.estadoPedido)}">
+                                        {{ p.estadoPedido }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button @click="verDetalle(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Ver Detalle">
                                         🔍
                                     </button>
                                 </td>
@@ -207,10 +260,22 @@ export default {
             pedidosPendientes: [],
             mostrarModal: false, // Modal de la tabla grande
             selectedOrder: null, // Modal del detalle pequeño (recibo)
-            timer: null
+            timer: null,
+
+            // HISTORIAL
+            mostrarHistorial: false,
+            historialPedidos: [],
+            filtros: {
+                fecha: '',
+                cliente: '',
+                pizza: ''
+            }
         }
     },
     computed: {
+        totalCarrito() {
+            return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+        },
         productosFiltrados() {
             let lista = this.productos;
             if (this.filtro === 'Pizzas') lista = this.productos.filter(p => p.categoria === 'Pizzas' || p.categoria === 'pizza');
@@ -220,9 +285,6 @@ export default {
                 lista = lista.filter(p => p.nombre.toLowerCase().includes(this.busqueda.toLowerCase()));
             }
             return lista;
-        },
-        totalCarrito() {
-            return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
         }
     },
     mounted() {
@@ -317,6 +379,32 @@ export default {
         // --- NUEVOS MÉTODOS PARA EL MODAL DETALLE ---
         verDetalle(order) {
             this.selectedOrder = order;
+        },
+
+        // --- MÉTODOS HISTORIAL ---
+        async cargarHistorial() {
+            try {
+                const token = localStorage.getItem('token');
+                const params = new URLSearchParams();
+                if (this.filtros.fecha) params.append('fecha', this.filtros.fecha);
+                if (this.filtros.cliente) params.append('cliente', this.filtros.cliente);
+                if (this.filtros.pizza) params.append('pizza', this.filtros.pizza);
+
+                const res = await fetch(`http://localhost:3000/api/pos/all-orders?${params.toString()}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    this.historialPedidos = await res.json();
+                }
+            } catch (e) { console.error(e); }
+        },
+        abrirHistorial() {
+            this.mostrarHistorial = true;
+            this.cargarHistorial();
+        },
+        limpiarFiltros() {
+            this.filtros = { fecha: '', cliente: '', pizza: '' };
+            this.cargarHistorial();
         },
 
         getColorEstado(estado) {

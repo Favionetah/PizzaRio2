@@ -8,19 +8,27 @@ const OrderController = require('../controllers/order.controller');
 
 // 1. Ver la Cola de Pedidos (Solo Admins y Cajeros)
 router.get(
-    '/orders', 
-    [ authMiddleware, checkRole(['Administrador', 'Cajero']) ], 
+    '/orders',
+    [authMiddleware, checkRole(['Administrador', 'Cajero'])],
     OrderController.getPendingOrders
 );
 router.put(
-    '/orders/:id/status', 
-    [ authMiddleware, checkRole(['Administrador', 'Cajero']) ], 
+    '/orders/:id/status',
+    [authMiddleware, checkRole(['Administrador', 'Cajero'])],
     OrderController.updateOrderStatus
 );
+
+// 2. Ver Historial Completo con Filtros (Solo Admins y Cajeros)
+router.get(
+    '/all-orders',
+    [authMiddleware, checkRole(['Administrador', 'Cajero'])],
+    OrderController.getAllOrders
+);
+
 /////////////TEST////////////////
 router.get(
     '/test-protegido',
-    [ authMiddleware, checkRole(['Administrador', 'Cajero']) ],
+    [authMiddleware, checkRole(['Administrador', 'Cajero'])],
 
     (req, res) => {
         res.status(200).json({
@@ -32,7 +40,7 @@ router.get(
 
 router.get(
     '/solo-admin',
-    [ authMiddleware, checkRole(['Administrador']) ],
+    [authMiddleware, checkRole(['Administrador'])],
     (req, res) => {
         res.json({ message: 'Bienvenido ADMIN' });
     }

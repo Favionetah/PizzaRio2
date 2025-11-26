@@ -103,4 +103,21 @@ OrderController.getAllHistory = async (req, res) => {
     }
 };
 
+// --- FUNCIONES PARA HISTORIAL CON FILTROS (POS/ADMIN) ---
+OrderController.getAllOrders = async (req, res) => {
+    try {
+        const filters = {
+            fecha: req.query.fecha,
+            cliente: req.query.cliente,
+            pizza: req.query.pizza
+        };
+
+        const orders = await Order.getAllOrders(filters);
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener historial de pedidos" });
+    }
+};
+
 module.exports = OrderController;
