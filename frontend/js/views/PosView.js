@@ -18,7 +18,7 @@ export default {
                 <div class="category-tabs">
                     <button 
                         v-for="cat in categorias" 
-                        :class="['tab-btn', { active: filtro === cat }]"
+                        :class="['tab-btn', { active: filtro === cat }] "
                         @click="filtro = cat"
                     >
                         {{ cat }}
@@ -92,6 +92,7 @@ export default {
                 <span class="queue-mini-list">
                     <span v-for="p in pedidosPendientes.slice(0, 3)" :key="p.idPedido" style="margin-right:15px; font-size:0.85rem;">
                         #{{ p.idPedido }} {{ p.nombreCliente }} ({{ p.estadoPedido }})
+                        <button @click="abrirFactura(p)" style="margin-left:5px; font-size:0.8rem; cursor:pointer;">🧾</button>
                     </span>
                 </span>
             </div>
@@ -102,53 +103,43 @@ export default {
         </div>
 
         <div v-if="mostrarModal" class="modal-overlay" @click.self="mostrarModal = false">
-            <div class="modal-content" style="width: 90%; height: 90%;">
+            <div class="modal-content" style="width: 90%; height: 90%; overflow-y:auto;">
                 <div class="modal-header">
                     <h2>PEDIDOS CONFIRMADOS</h2>
                     <button @click="mostrarModal = false" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:red;">X</button>
                 </div>
                 
-                <div style="overflow-y:auto;">
-                    <table class="queue-table">
-                        <thead>
-                            <tr>
-                                <th>NRO</th>
-                                <th>CLIENTE</th>
-                                <th>ESTADO</th>
-                                <th>TOTAL</th>
-                                <th>ACCIONES</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="p in pedidosPendientes" :key="p.idPedido">
-                                <td>#{{ p.idPedido }}</td>
-                                <td>{{ p.nombreCliente }}</td>
-                                <td :style="{ color: getColorEstado(p.estadoPedido) }">
-                                    <strong>{{ p.estadoPedido }}</strong>
-                                </td>
-                                <td>{{ p.totalPedido }} BS.</td>
-                                <td>
-                                    <button 
-                                        v-if="p.estadoPedido !== 'Entregado'" 
-                                        @click="avanzarEstado(p)" 
-                                        style="cursor:pointer; background:none; border:none; font-size:1.2rem; margin-right:10px;" 
-                                        title="Avanzar Estado"
-                                    >
-                                        ✅
-                                    </button>
-                                    
-                                    <button 
-                                        @click="verDetalle(p)" 
-                                        style="cursor:pointer; background:none; border:none; font-size:1.2rem;" 
-                                        title="Ver Detalle"
-                                    >
-                                        🔍
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>NRO</th>
+                            <th>CLIENTE</th>
+                            <th>ESTADO</th>
+                            <th>TOTAL</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="p in pedidosPendientes" :key="p.idPedido">
+                            <td>#{{ p.idPedido }}</td>
+                            <td>{{ p.nombreCliente }}</td>
+                            <td :style="{ color: getColorEstado(p.estadoPedido) }"><strong>{{ p.estadoPedido }}</strong></td>
+                            <td>{{ p.totalPedido }} BS.</td>
+                            <td>
+                                <button 
+                                    v-if="p.estadoPedido !== 'Entregado'" 
+                                    @click="avanzarEstado(p)" 
+                                    style="cursor:pointer; background:none; border:none; font-size:1.2rem; margin-right:10px;" 
+                                    title="Avanzar Estado"
+                                >
+                                    ✅
+                                </button>
+                                <button @click="verDetalle(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Ver Detalle">🔍</button>
+                                <button @click="abrirFactura(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Abrir Factura">🧾</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -185,15 +176,10 @@ export default {
                                 <td>{{ formatearHora(p.fechaPedido) }}</td>
                                 <td>{{ p.nombreCliente }}</td>
                                 <td>{{ p.totalPedido }} BS.</td>
+                                <td><span class="status-badge" :style="{background: getColorEstado(p.estadoPedido)}">{{ p.estadoPedido }}</span></td>
                                 <td>
-                                    <span class="status-badge" :style="{background: getColorEstado(p.estadoPedido)}">
-                                        {{ p.estadoPedido }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <button @click="verDetalle(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Ver Detalle">
-                                        🔍
-                                    </button>
+                                    <button @click="verDetalle(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Ver Detalle">🔍</button>
+                                    <button @click="abrirFactura(p)" style="cursor:pointer; background:none; border:none; font-size:1.2rem;" title="Abrir Factura">🧾</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -208,27 +194,17 @@ export default {
                 <div class="modal-header-box">
                     <h3>DETALLE DE PEDIDO</h3>
                     <p>Orden Nro. #{{ selectedOrder.idPedido }}</p>
-                    <p style="font-size: 0.8rem; margin-top: 5px; font-weight: normal;">
-                        {{ formatearHora(selectedOrder.fechaPedido) }}
-                    </p>
+                    <p style="font-size: 0.8rem; margin-top: 5px; font-weight: normal;">{{ formatearHora(selectedOrder.fechaPedido) }}</p>
                 </div>
                 
                 <ul class="receipt-list">
-                    <li v-if="parseItems(selectedOrder.items).length === 0" style="text-align:center; color:#999;">
-                        No hay detalles disponibles.
-                    </li>
-
+                    <li v-if="parseItems(selectedOrder.items).length === 0" style="text-align:center; color:#999;">No hay detalles disponibles.</li>
                     <li v-for="(item, index) in parseItems(selectedOrder.items)" :key="index" class="receipt-item">
                         <div class="item-desc">
-                            <div>
-                                <span class="item-qty">{{ item.cantidad }}x</span> 
-                                <span class="item-name">{{ item.nombre }}</span>
-                            </div>
+                            <div><span class="item-qty">{{ item.cantidad }}x</span> <span class="item-name">{{ item.nombre }}</span></div>
                             <div class="item-unit-price">P.U: {{ item.precio }} BS.</div>
                         </div>
-                        <div class="item-subtotal">
-                            {{ (item.precio * item.cantidad).toFixed(2) }} BS.
-                        </div>
+                        <div class="item-subtotal">{{ (item.precio * item.cantidad).toFixed(2) }} BS.</div>
                     </li>
                 </ul>
 
@@ -248,42 +224,28 @@ export default {
     props: ['user'],
     data() {
         return {
-            // VENTA
             productos: [],
             carrito: [],
             categorias: ['Pizzas', 'Bebidas', 'Combos', 'Otros'],
             filtro: 'Pizzas',
             busqueda: '',
             nombreCliente: '',
-
-            // GESTIÓN
             pedidosPendientes: [],
-            mostrarModal: false, // Modal de la tabla grande
-            selectedOrder: null, // Modal del detalle pequeño (recibo)
+            mostrarModal: false,
+            selectedOrder: null,
             timer: null,
-
-            // HISTORIAL
             mostrarHistorial: false,
             historialPedidos: [],
-            filtros: {
-                fecha: '',
-                cliente: '',
-                pizza: ''
-            }
+            filtros: { fecha: '', cliente: '', pizza: '' }
         }
     },
     computed: {
-        totalCarrito() {
-            return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
-        },
+        totalCarrito() { return this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0); },
         productosFiltrados() {
             let lista = this.productos;
-            if (this.filtro === 'Pizzas') lista = this.productos.filter(p => p.categoria === 'Pizzas' || p.categoria === 'pizza');
-            else if (this.filtro === 'Bebidas') lista = this.productos.filter(p => p.categoria === 'Bebida');
-
-            if (this.busqueda) {
-                lista = lista.filter(p => p.nombre.toLowerCase().includes(this.busqueda.toLowerCase()));
-            }
+            if (this.filtro === 'Pizzas') lista = lista.filter(p => p.categoria.toLowerCase() === 'pizzas');
+            else if (this.filtro === 'Bebidas') lista = lista.filter(p => p.categoria.toLowerCase() === 'bebidas');
+            if (this.busqueda) lista = lista.filter(p => p.nombre.toLowerCase().includes(this.busqueda.toLowerCase()));
             return lista;
         }
     },
@@ -292,63 +254,43 @@ export default {
         this.cargarPedidosPendientes();
         this.timer = setInterval(this.cargarPedidosPendientes, 5000);
     },
-    unmounted() {
-        clearInterval(this.timer);
-    },
+    unmounted() { clearInterval(this.timer); },
     methods: {
-        // --- MÉTODOS DE VENTA ---
-        async cargarProductos() {
-            try {
-                const res = await fetch('http://localhost:3000/api/products');
-                this.productos = await res.json();
-            } catch (e) { console.error(e); }
+        cargarProductos: async function () {
+            try { const res = await fetch('http://localhost:3000/api/products'); this.productos = await res.json(); }
+            catch (e) { console.error(e); }
         },
         agregarAlCarrito(prod) {
             const existente = this.carrito.find(i => i.id === prod.id);
             if (existente) existente.cantidad++;
             else this.carrito.push({ ...prod, cantidad: 1 });
         },
-        eliminarDelCarrito(index) {
-            this.carrito.splice(index, 1);
-        },
+        eliminarDelCarrito(index) { this.carrito.splice(index, 1); },
         async confirmarPedido() {
             if (!confirm(`¿Confirmar venta por ${this.totalCarrito} BS?`)) return;
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch('http://localhost:3000/api/orders', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        total: this.totalCarrito,
-                        carrito: this.carrito,
-                        nombreClienteManual: this.nombreCliente
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ total: this.totalCarrito, carrito: this.carrito, nombreClienteManual: this.nombreCliente })
                 });
-
+                const data = await res.json();
                 if (res.ok) {
-                    alert("✅ PEDIDO CONFIRMADO");
                     this.carrito = [];
                     this.nombreCliente = '';
                     this.cargarPedidosPendientes();
-                } else {
-                    alert("Error al guardar pedido");
-                }
+                    // Abrir factura automáticamente
+                    window.open(`http://localhost:3000/api/invoices/${data.idPedido}/pdf`, '_blank');
+                    alert("✅ PEDIDO CONFIRMADO");
+                } else alert("Error al guardar pedido: " + (data.message || ''));
             } catch (e) { alert("Error de conexión"); }
         },
-
-        // --- MÉTODOS DE GESTIÓN ---
         async cargarPedidosPendientes() {
             try {
                 const token = localStorage.getItem('token');
-                const res = await fetch('http://localhost:3000/api/pos/orders', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    this.pedidosPendientes = await res.json();
-                }
+                const res = await fetch('http://localhost:3000/api/pos/orders', { headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) this.pedidosPendientes = await res.json();
             } catch (e) { console.error(e); }
         },
         async avanzarEstado(pedido) {
@@ -356,32 +298,20 @@ export default {
             if (pedido.estadoPedido === 'Pendiente') nuevoEstado = 'En preparación';
             else if (pedido.estadoPedido === 'En preparación') nuevoEstado = 'Entregado';
             else return;
-
             try {
                 const token = localStorage.getItem('token');
                 await fetch(`http://localhost:3000/api/pos/orders/${pedido.idPedido}/status`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({ estado: nuevoEstado })
                 });
                 this.cargarPedidosPendientes();
             } catch (e) { alert("Error"); }
         },
-        logout() {
-            this.$emit('navigate', 'home-view');
-            localStorage.removeItem('token');
-            location.reload();
-        },
-
-        // --- NUEVOS MÉTODOS PARA EL MODAL DETALLE ---
-        verDetalle(order) {
-            this.selectedOrder = order;
-        },
-
-        // --- MÉTODOS HISTORIAL ---
+        logout() { this.$emit('navigate', 'home-view'); localStorage.removeItem('token'); location.reload(); },
+        verDetalle(order) { this.selectedOrder = order; },
+        abrirHistorial() { this.mostrarHistorial = true; this.cargarHistorial(); },
+        limpiarFiltros() { this.filtros = { fecha: '', cliente: '', pizza: '' }; this.cargarHistorial(); },
         async cargarHistorial() {
             try {
                 const token = localStorage.getItem('token');
@@ -389,40 +319,15 @@ export default {
                 if (this.filtros.fecha) params.append('fecha', this.filtros.fecha);
                 if (this.filtros.cliente) params.append('cliente', this.filtros.cliente);
                 if (this.filtros.pizza) params.append('pizza', this.filtros.pizza);
-
-                const res = await fetch(`http://localhost:3000/api/pos/all-orders?${params.toString()}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    this.historialPedidos = await res.json();
-                }
+                const res = await fetch(`http://localhost:3000/api/pos/all-orders?${params.toString()}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) this.historialPedidos = await res.json();
             } catch (e) { console.error(e); }
         },
-        abrirHistorial() {
-            this.mostrarHistorial = true;
-            this.cargarHistorial();
-        },
-        limpiarFiltros() {
-            this.filtros = { fecha: '', cliente: '', pizza: '' };
-            this.cargarHistorial();
-        },
-
-        getColorEstado(estado) {
-            if (estado === 'Pendiente') return '#f39c12'; // Naranja
-            if (estado === 'En preparación') return '#2980b9'; // Azul
-            return '#27ae60'; // Verde
-        },
-        formatearHora(fechaISO) {
-            if (!fechaISO) return '';
-            const fecha = new Date(fechaISO);
-            // Formato: DD/MM/YYYY HH:MM
-            return fecha.toLocaleDateString() + ' ' + fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        },
-        parseItems(itemsJson) {
-            try {
-                // Si MySQL devuelve un objeto JSON directo, úsalo. Si es string, paréalo.
-                return typeof itemsJson === 'string' ? JSON.parse(itemsJson) : (itemsJson || []);
-            } catch (e) { return []; }
+        getColorEstado(estado) { if (estado === 'Pendiente') return '#f39c12'; if (estado === 'En preparación') return '#2980b9'; return '#27ae60'; },
+        formatearHora(fechaISO) { if (!fechaISO) return ''; const fecha = new Date(fechaISO); return fecha.toLocaleDateString() + ' ' + fecha.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); },
+        parseItems(itemsJson) { try { return typeof itemsJson === 'string' ? JSON.parse(itemsJson) : (itemsJson || []); } catch (e) { return []; } },
+        abrirFactura(pedido) {
+            window.open(`http://localhost:3000/api/invoices/${pedido.idPedido}/pdf`, '_blank');
         }
     }
 }
