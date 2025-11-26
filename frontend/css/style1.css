@@ -703,10 +703,11 @@ nav a.is-active {
     padding: 30px;
     max-width: 1200px;
     margin: 20px auto;
-    background-color: white; /* Fondo blanco limpio */
+    background-color: white;
+    /* Fondo blanco limpio */
     min-height: calc(100vh - 100px);
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Header con línea inferior roja */
@@ -716,7 +717,8 @@ nav a.is-active {
     align-items: center;
     margin-bottom: 0;
     padding-bottom: 15px;
-    border-bottom: 2px solid var(--rojo-tomate); /* La línea roja de la imagen */
+    border-bottom: 2px solid var(--rojo-tomate);
+    /* La línea roja de la imagen */
 }
 
 .orders-title {
@@ -735,32 +737,37 @@ nav a.is-active {
 
 .orders-table {
     width: 100%;
-    border-collapse: collapse; /* Importante: Sin espacios entre celdas */
+    border-collapse: collapse;
+    /* Importante: Sin espacios entre celdas */
     font-family: 'Arial', sans-serif;
 }
 
 /* Encabezados */
 .orders-table thead th {
     text-align: left;
-    color: #777; /* Gris oscuro */
+    color: #777;
+    /* Gris oscuro */
     font-weight: 800;
     text-transform: uppercase;
     font-size: 0.85rem;
     padding: 15px 10px;
-    border-bottom: 1px solid #e0b400; /* Línea dorada delgada */
+    border-bottom: 1px solid #e0b400;
+    /* Línea dorada delgada */
 }
 
 /* Filas */
 .orders-table tbody tr {
     transition: background 0.2s;
 }
+
 .orders-table tbody tr:hover {
     background-color: #fdfdfd;
 }
 
 .orders-table td {
     padding: 15px 10px;
-    border-bottom: 1px solid #f0f0f0; /* Línea separatoria sutil */
+    border-bottom: 1px solid #f0f0f0;
+    /* Línea separatoria sutil */
     color: #333;
     font-size: 0.95rem;
     vertical-align: middle;
@@ -779,10 +786,26 @@ nav a.is-active {
 }
 
 /* Colores exactos de la imagen */
-.st-text-pendiente { color: #f39c12; } /* Naranja */
-.st-text-en-preparación { color: #0000ff; } /* Azul fuerte */
-.st-text-entregado { color: #27ae60; } /* Verde */
-.st-text-cancelado { color: #c0392b; } /* Rojo */
+.st-text-pendiente {
+    color: #f39c12;
+}
+
+/* Naranja */
+.st-text-en-preparación {
+    color: #0000ff;
+}
+
+/* Azul fuerte */
+.st-text-entregado {
+    color: #27ae60;
+}
+
+/* Verde */
+.st-text-cancelado {
+    color: #c0392b;
+}
+
+/* Rojo */
 
 .col-total {
     font-weight: normal;
@@ -809,11 +832,14 @@ nav a.is-active {
     transition: opacity 0.2s;
 }
 
-.btn-icon-square:hover { opacity: 0.8; }
+.btn-icon-square:hover {
+    opacity: 0.8;
+}
 
 /* Botón Check (Verde sólido) */
 .btn-check {
-    background-color: #58d68d; /* Verde claro */
+    background-color: #58d68d;
+    /* Verde claro */
     color: white;
     font-size: 1rem;
 }
@@ -821,8 +847,10 @@ nav a.is-active {
 /* Botón Lupa (Transparente con icono azul) */
 .btn-search {
     background-color: transparent;
-    color: #3498db; /* Azul */
-    font-size: 1.4rem; /* Lupa grande */
+    color: #3498db;
+    /* Azul */
+    font-size: 1.4rem;
+    /* Lupa grande */
     padding: 0;
 }
 
@@ -835,15 +863,17 @@ nav a.is-active {
 
 /* --- MODAL SOLIDO (CORRECCIÓN FONDO) --- */
 .modal-receipt {
-    background-color: white !important; /* Forzar blanco */
+    background-color: white !important;
+    /* Forzar blanco */
     width: 450px;
     border-radius: 10px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-    display: flex; 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    display: flex;
     flex-direction: column;
     position: relative;
     z-index: 2001;
 }
+
 /* =========================================
    8. VISTA POS (SISTEMA CAJERO)
    ========================================= */
@@ -1073,25 +1103,30 @@ nav a.is-active {
 
 .modal-overlay {
     position: fixed;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
-    display: flex; 
-    justify-content: center; 
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
     align-items: center;
     z-index: 2000;
-    backdrop-filter: blur(2px); /* Difuminado suave del fondo */
+    backdrop-filter: blur(2px);
+    /* Difuminado suave del fondo */
 }
 
 .modal-receipt {
-    background-color: white; /* ¡FONDO SÓLIDO IMPORTANTE! */
+    background-color: white;
+    /* ¡FONDO SÓLIDO IMPORTANTE! */
     width: 450px;
     max-width: 90%;
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3); /* Sombra fuerte para dar profundidad */
-    overflow: hidden; /* Para que el contenido respete los bordes redondos */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    /* Sombra fuerte para dar profundidad */
+    overflow: hidden;
+    /* Para que el contenido respete los bordes redondos */
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease-out;
@@ -1099,7 +1134,8 @@ nav a.is-active {
 
 /* Cabecera del Modal */
 .modal-header-box {
-    background-color: var(--bg-crema); /* Fondo crema */
+    background-color: var(--bg-crema);
+    /* Fondo crema */
     padding: 20px;
     border-bottom: 3px solid var(--amarillo-dorado);
     text-align: center;
@@ -1123,9 +1159,10 @@ nav a.is-active {
 /* Lista de productos */
 .receipt-list {
     list-style: none;
-    margin: 0; 
+    margin: 0;
     padding: 20px;
-    max-height: 60vh; /* Si es muy largo, hace scroll */
+    max-height: 60vh;
+    /* Si es muy largo, hace scroll */
     overflow-y: auto;
 }
 
@@ -1181,7 +1218,7 @@ nav a.is-active {
 }
 
 .receipt-total-row {
-    display: flex; 
+    display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
@@ -1218,9 +1255,17 @@ nav a.is-active {
 
 /* Animación de entrada */
 @keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
+
 /* =========================================
    9. VISTA ADMIN CAJEROS
    ========================================= */
@@ -1646,11 +1691,12 @@ nav a.is-active {
 /* El cuadro desplegable */
 .user-dropdown {
     position: absolute;
-    top: 115%; /* Un poco abajo del botón */
+    top: 115%;
+    /* Un poco abajo del botón */
     right: 0;
     background-color: white;
     min-width: 180px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     overflow: hidden;
     z-index: 1000;
@@ -1680,11 +1726,232 @@ nav a.is-active {
 }
 
 .dropdown-item.danger {
-    color: #d62300; /* Rojo */
+    color: #d62300;
+    /* Rojo */
     font-weight: bold;
     border-top: 1px solid #eee;
 }
 
 .dropdown-item.danger:hover {
     background-color: #fff0f0;
+}
+
+/* =========================================
+   7. VISTA CHECKOUT (PAGO Y REVISIÓN)
+   ========================================= */
+.checkout-layout {
+    padding: 40px 20px 100px;
+    /* Padding, más espacio abajo por el footer */
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--bg-crema);
+    min-height: calc(100vh - 80px);
+    /* Ocupa el espacio disponible */
+}
+
+.checkout-layout h2 {
+    color: var(--rojo-tomate);
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+    border-bottom: 4px solid var(--amarillo-dorado);
+}
+
+.checkout-items {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Reutilizando estilos de cart-item, pero con mejoras visuales */
+.checkout-items .cart-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0;
+}
+
+.checkout-items .cart-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-items .cart-item-info h4 {
+    font-size: 1.1rem;
+}
+
+.checkout-items .cart-item-info span {
+    color: var(--txt-cafe);
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+/* Controles de cantidad más visibles */
+.checkout-items .cart-controls button {
+    background-color: var(--bg-crema);
+    border: 1px solid var(--amarillo-dorado);
+    color: var(--txt-cafe);
+}
+
+.checkout-items .cart-controls button:hover {
+    background-color: var(--rojo-tomate);
+    color: white;
+}
+
+
+/* --- Sección de Pago --- */
+.payment-selection {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed var(--amarillo-dorado);
+    text-align: center;
+}
+
+.payment-selection h3 {
+    color: var(--txt-cafe);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.payment-selection button {
+    padding: 15px 30px;
+    border: 3px solid var(--txt-cafe);
+    background: white;
+    color: var(--txt-cafe);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.payment-selection button.selected,
+.payment-selection button:hover {
+    background-color: var(--amarillo-dorado);
+    border-color: var(--rojo-tomate);
+    color: var(--txt-cafe);
+    box-shadow: 0 4px 10px rgba(242, 183, 5, 0.4);
+    transform: translateY(-2px);
+}
+
+
+/* --- Footer del Carrito (Checkout) --- */
+.checkout-items .cart-footer {
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+    display: block;
+    /* Desactivamos el margin-top: auto que tenía en el cart-column */
+    margin-top: 30px;
+}
+
+/* Botón de Confirmación/Pago */
+.btn-checkout {
+    /* Reutiliza el estilo del carrito pero lo hacemos más grande */
+    font-size: 1.3rem;
+    padding: 18px;
+    border-radius: 50px;
+    /* Botón grande y redondo */
+    margin-top: 20px;
+    box-shadow: 0 6px 0 #c52e12;
+}
+
+.btn-checkout:not(:disabled):hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 #a8250f;
+}
+
+.btn-checkout:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #a8250f;
+}
+
+/* Botón Cancelar */
+.btn-cancel {
+    width: 100%;
+    padding: 12px;
+    background-color: transparent;
+    color: var(--txt-cafe);
+    border: 2px solid var(--txt-cafe);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: var(--txt-cafe);
+    color: white;
+    border-color: var(--txt-cafe);
+}
+
+/* Estilo para QR y formulario de tarjeta */
+.qr-display,
+.card-form {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qr-display ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+.qr-display li,
+.card-form input {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Inputs de tarjeta */
+.card-form input {
+    width: 250px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Botones de pago */
+.payment-selection button {
+    margin: 5px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.payment-selection button.selected {
+    background-color: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+/* Botones de checkout */
+.btn-checkout,
+.btn-cancel {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-checkout:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }

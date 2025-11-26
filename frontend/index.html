@@ -9,77 +9,70 @@
     <link rel="stylesheet" href="css/pos.css">
     <link rel="stylesheet" href="css/admin.css">
 
+    <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYcO6RxgS1q1GjGki_OOH0GbXoJW5ogV0&callback=initMap"></script>
+
+    <!-- QRCode.js para Checkout -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <!-- Google Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYcO6RxgS1q1GjGki_OOH0GbXoJW5ogV0&callback=initMap"
+        async defer></script>
 </head>
 
 <body>
-
     <div id="app">
+        <!-- Header -->
         <header class="bk-header">
             <div class="logo">
                 <img src="images/pizzaoceanohdPENEg.png" alt="Logo Pizza Rio" class="logo-icon">
                 <h1>Pizza Río</h1>
             </div>
             <nav>
-                <a href="#" @click.prevent="currentView = 'home-view'">Inicio</a>
-                <a href="#" v-if="!user || user.role !== 'Cajero'"
-                    @click.prevent="currentView = 'showcase-view'">Menú</a>
-                <a href="#" v-if="user && user.role === 'Cajero'" @click.prevent="currentView = 'pos-view'">Pedidos</a>
-                <a href="#" @click.prevent="currentView = 'map-view'">Sucursales</a>
-                <a href="#" v-if="user && user.role !== 'Cajero'"
-                    @click.prevent="currentView = 'myorders-view'">Pedidos</a>
-
-                <a href="#" v-if="user && user.role === 'Administrador'"
-                    @click.prevent="currentView = 'admin-employees-view'">Administración</a>
-
-                <a href="#" v-if="user && user.role === 'Administrador'"
-                    @click.prevent="currentView = 'admin-schedules-view'">Horarios</a>
+                <a href="#" @click.prevent="currentView='home-view'">Inicio</a>
+                <a href="#" v-if="!user || user.role !== 'Cajero'" @click.prevent="currentView='showcase-view'">Menú</a>
+                <a href="#" v-if="user && user.role==='Cajero'" @click.prevent="currentView='pos-view'">Pedidos</a>
+                <a href="#" @click.prevent="currentView='map-view'">Sucursales</a>
+                <a href="#" v-if="user && user.role!=='Cajero'" @click.prevent="currentView='myorders-view'">Pedidos</a>
+                <a href="#" v-if="user && user.role==='Administrador'"
+                    @click.prevent="currentView='admin-employees-view'">Administración</a>
+                <a href="#" v-if="user && user.role==='Administrador'"
+                    @click.prevent="currentView='admin-schedules-view'">Horarios</a>
             </nav>
 
             <div class="auth-buttons">
-
                 <div v-if="user" class="user-profile-container">
-
                     <button @click="toggleUserMenu" class="btn-user-profile">
                         👤 {{ user.nombre }} ▼
                     </button>
-
                     <div v-if="showUserMenu" class="user-dropdown">
-
                         <div class="dropdown-header">
-                            <div style="font-weight: 900; font-size: 1.1rem; color: #333; margin-bottom: 4px;">
-                                {{ user.nombre }}
-                            </div>
-                            <small style="color: #888; text-transform: uppercase; font-size: 0.75rem;">
-                                {{ user.role }}
-                            </small>
+                            <div style="font-weight:900; font-size:1.1rem; color:#333; margin-bottom:4px;">{{
+                                user.nombre }}</div>
+                            <small style="color:#888; text-transform:uppercase; font-size:0.75rem;">{{ user.role
+                                }}</small>
                         </div>
-
-                        <a href="#" @click.prevent="logout" class="dropdown-item danger">
-                            Cerrar Sesión 🚪
-                        </a>
+                        <a href="#" @click.prevent="logout" class="dropdown-item danger">Cerrar Sesión 🚪</a>
                     </div>
                 </div>
-
                 <button v-else @click="goToLogin" class="btn-pide-aqui">PIDE AQUÍ</button>
             </div>
-
         </header>
 
+        <!-- Main -->
         <main class="main-content">
-            <component :is="currentView" :user="user" @navigate="handleNavigation" @login-success="handleLoginSuccess"
-                @logout="logout"></component>
+            <component :is="currentView" :user="user" :carrito="carritoCheckout" @navigate="handleNavigation"
+                @login-success="handleLoginSuccess" @logout="logout" @go-checkout="goToCheckout"></component>
         </main>
 
+        <!-- Footer -->
         <footer class="pizza-rio-footer">
             <p>&copy; 2025 Pizza Río Bolivia. Todos los derechos reservados.</p>
         </footer>
     </div>
 
+    <!-- App.js -->
     <script type="module" src="js/app.js"></script>
-
 </body>
 
 </html>

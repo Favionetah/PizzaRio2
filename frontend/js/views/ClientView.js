@@ -86,7 +86,7 @@ export default {
                     <button 
                         class="btn-checkout" 
                         :disabled="carrito.length === 0"
-                        @click="checkout"
+                        @click="irCheckout"
                     >
                         {{ user ? 'CONFIRMAR PEDIDO ✅' : 'INICIAR SESIÓN PARA PEDIR' }}
                     </button>
@@ -101,7 +101,6 @@ export default {
             productos: [],
             loading: true,
             filtro: 'Todos',
-            // 1. NUEVO: Aquí guardaremos lo que el usuario elija
             carrito: [],
             modalOpen: false,
             selectedProduct: null
@@ -112,14 +111,10 @@ export default {
             if (this.filtro === 'Todos') return this.productos;
             return this.productos.filter(p => p.categoria === this.filtro);
         },
-        // 2. NUEVO: Calculadora automática
         totalCarrito() {
-            // Recorre el carrito y suma (precio * cantidad)
             return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
         }
     },
-
-    // mounted se ejecuta apenas aparece este componente en pantalla
     async mounted() {
         try {
             const res = await fetch('http://localhost:3000/api/products');
@@ -140,32 +135,16 @@ export default {
             this.modalOpen = false;
             this.selectedProduct = null;
         },
-        // 3. NUEVO: Función inteligente para añadir
         agregar(prod) {
-            // Buscamos si este producto YA existe en el carrito
             const itemExistente = this.carrito.find(item => item.id === prod.id);
-
-            if (itemExistente) {
-                // Si ya existe, solo aumentamos el contador
-                itemExistente.cantidad++;
-            } else {
-                // Si es nuevo, lo metemos al array con cantidad 1
-                // Usamos {...prod} para crear una COPIA del producto y no romper nada
-                this.carrito.push({ ...prod, cantidad: 1 });
-            }
+            if (itemExistente) itemExistente.cantidad++;
+            else this.carrito.push({ ...prod, cantidad: 1 });
         },
-
-        // 4. NUEVO: Función para aumentar/disminuir desde el carrito
         cambiarCantidad(item, valor) {
             item.cantidad += valor;
-            // Si la cantidad llega a 0, lo borramos del carrito
-            if (item.cantidad <= 0) {
-                this.carrito = this.carrito.filter(i => i.id !== item.id);
-            }
+            if (item.cantidad <= 0) this.carrito = this.carrito.filter(i => i.id !== item.id);
         },
-
-
-        async checkout() {
+        irCheckout() {
             if (this.carrito.length === 0) return;
 
             if (!this.user) {
@@ -174,37 +153,7 @@ export default {
                 return;
             }
 
-            const confirmar = confirm(`¿Confirmar pedido por Bs ${this.totalCarrito}?`);
-            if (!confirmar) return;
-
-            try {
-                const token = localStorage.getItem('token'); // Necesitamos el token para identificarnos
-
-                const response = await fetch('http://localhost:3000/api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // ¡Enviamos el pase VIP!
-                    },
-                    body: JSON.stringify({
-                        total: this.totalCarrito,
-                        carrito: this.carrito
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert(`✅ ${data.message}\nTu número de pedido es: #${data.idPedido}`);
-                    this.carrito = []; // Vaciamos el carrito
-                } else {
-                    alert("❌ Error: " + data.message);
-                }
-
-            } catch (error) {
-                console.error(error);
-                alert("Error de conexión");
-            }
+            this.$emit('go-checkout', this.carrito);
         }
-    },
+    }
 }
